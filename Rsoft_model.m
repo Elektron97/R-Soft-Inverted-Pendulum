@@ -6,7 +6,7 @@ clc
 %% Add Functions
 addpath("my_functions");
 
-save_function = true;
+save_function = false;
 %% Declare Symbolic Variables
 syms theta_r theta0 theta1 real
 syms theta_r_dot theta0_dot theta1_dot real
@@ -61,6 +61,8 @@ for i = 1:length(theta)
 end
 
 twist_s = J_sd * theta_dot;
+
+matlabFunction(J_sd, 'File', 'jacobianSoft', 'Vars', [theta; s; d; L; D], 'Outputs', {'J'});
 
 %% Inertia Matrix
 rho = m*dirac(s-1);
