@@ -28,3 +28,4 @@ for i = 1:length(theta0)
 %    axis auto
    drawnow
 end
+
