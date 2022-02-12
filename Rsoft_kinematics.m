@@ -44,9 +44,6 @@ T0s = [my_rot(alpha, 'z') p_s; zeros(1, 3) 1] ;
 p_sd_hom = simplify(Ti0*T0s*[d*D; 0; 0; 1]);
 p_sd = p_sd_hom(1:3);
 
-%Validation
-limit(p_sd, theta1, 0)
-
 %% Differential Kinematics
 J_sd = sym(zeros(2, length(theta)));
 
