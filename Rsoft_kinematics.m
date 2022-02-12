@@ -40,8 +40,10 @@ p_s = simplify([x_s; y_s; 0]);
 
 T0s = [my_rot(alpha, 'z') p_s; zeros(1, 3) 1] ;
 
+Tis = Ti0*T0s;
+
 %% Point on Thickness D
-p_sd_hom = simplify(Ti0*T0s*[d*D; 0; 0; 1]);
+p_sd_hom = simplify(Tis*[d*D; 0; 0; 1]);
 p_sd = p_sd_hom(1:3);
 
 %% Differential Kinematics
@@ -56,6 +58,3 @@ for i = 1:length(theta)
 end
 
 twist_s = J_sd * theta_dot;
-
-
-
