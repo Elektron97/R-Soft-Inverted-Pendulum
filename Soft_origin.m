@@ -7,6 +7,7 @@ clc
 addpath("my_functions");
 
 save_functions = false;
+alternative = true;
 %% Declare Symbolic Variables
 syms theta0 theta1 real
 syms theta0_dot theta1_dot real
@@ -58,9 +59,36 @@ J_sd = simplify(J_sd);
 
 twist_s = J_sd * theta_dot;
 
+%% Test Formulazione Alternativa
+if(alternative)
+    syms theta_r real
+    Rr = my_rot(theta_r, 'z');
+    dRr = diff(Rr(1:2, 1:2), theta_r);
+    
+    JsdR = simplify([dRr*p_sd(1:2), Rr(1:2, 1:2)*J_sd]);
+    %Verificata!
+    eval(subs(JsdR, [theta_r; theta; s; d; L; D], [0; pi/4; -pi/4; 1; 0; 1; 0.1]));
+    jacobianSoft(0, pi/4, -pi/4, 1, 0, 1, 0.1);
+end
+
 %% Inertia Matrix
 rho = m*dirac(s-1);
 B = simplify(int( int(rho*(J_sd')*J_sd, d, [-0.5 0.5]), s, [0 1]));
+
+%% Formulazione Alternativa Inerzia
+if(alternative)
+    Brr = p_sd(1)^2 + p_sd(2)^2;
+    Bro = p_sd(1:2)'*[0 1; -1 0]*J_sd;
+    Bor = Bro';
+    Boo = (J_sd')*J_sd;
+    
+    Br = simplify(int( int(rho*[Brr Bro; Bor Boo], d, [-0.5 0.5]), s, [0 1]));
+    
+    %Verificata!
+    eval(subs(Br, [theta_r; theta; m; L; D], [pi/4; 1e-5; 1e-5; 1; 1; 0.1]))
+    inertiaMatrix(pi/4, 1e-5, 1e-5, 1, 1, 0.1)
+end
+
 
 %% Gravity Vector
 gravity_field = int( int(rho*g*(sin(phi)*p_sd(1) + cos(phi)*p_sd(2)), d, [-0.5 0.5]), s, [0 1]);

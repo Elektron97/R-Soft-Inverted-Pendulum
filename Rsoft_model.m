@@ -6,7 +6,7 @@ clc
 %% Add Functions
 addpath("my_functions");
 
-save_function = true;
+save_function = false;
 %% Declare Symbolic Variables
 syms theta_r theta0 theta1 real
 syms theta_r_dot theta0_dot theta1_dot real
