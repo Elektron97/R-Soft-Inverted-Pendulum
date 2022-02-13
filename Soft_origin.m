@@ -1,4 +1,4 @@
-%%%%%%%%%%% R-Soft Inverted Pendulum %%%%%%%%%%%%%%
+%%%%%%%% Soft Inverted %%%%%%%%
 clear all
 close all
 clc
@@ -6,23 +6,19 @@ clc
 %% Add Functions
 addpath("my_functions");
 
-save_function = true;
+save_functions = false;
 %% Declare Symbolic Variables
-syms theta_r theta0 theta1 real
-syms theta_r_dot theta0_dot theta1_dot real
+syms theta0 theta1 real
+syms theta0_dot theta1_dot real
 syms s d real
 syms L D real
 
-theta = [theta_r; theta0; theta1];
-theta_dot = [theta_r_dot; theta0_dot; theta1_dot];
+theta = [theta0; theta1];
+theta_dot = [theta0_dot; theta1_dot];
 
 syms m k g beta real
 
 phi = 0;
-%% Orientation of SoR {S0} w.r.t. {I}
-Ri0 = my_rot(theta_r, 'z');
-Ti0 = blkdiag(Ri0, 1);
-
 %% Affine Curvature
 K = theta0 + theta1*s;
 
@@ -45,10 +41,8 @@ p_s = simplify([x_s; y_s; 0]);
 
 T0s = [my_rot(alpha, 'z') p_s; zeros(1, 3) 1] ;
 
-Tis = Ti0*T0s;
-
 %% Point on Thickness D
-p_sd_hom = simplify(Tis*[d*D; 0; 0; 1]);
+p_sd_hom = simplify(T0s*[d*D; 0; 0; 1]);
 p_sd = p_sd_hom(1:3);
 
 %% Differential Kinematics
@@ -64,12 +58,8 @@ J_sd = simplify(J_sd);
 
 twist_s = J_sd * theta_dot;
 
-if(save_function)
-    matlabFunction(J_sd, 'File', 'jacobianSoft', 'Vars', [theta; s; d; L; D], 'Outputs', {'J'});
-end
 %% Inertia Matrix
 rho = m*dirac(s-1);
-% rho = m;
 B = simplify(int( int(rho*(J_sd')*J_sd, d, [-0.5 0.5]), s, [0 1]));
 
 %% Gravity Vector
@@ -83,16 +73,17 @@ end
 %% Elastic and Damping
 H2 = henkelMatrix(2);
 
-K = k*blkdiag(0, H2);
-Damp = beta*blkdiag(0, H2);
+K = k*H2;
+Damp = beta*H2;
 %% Coriolis
 C = christoffel(B, theta, theta_dot);
 
 %% Save Functions
-if(save_function)
-    matlabFunction(B, 'File', 'inertiaMatrix', 'Vars', [theta; m; L; D], 'Outputs', {'B'});
-    matlabFunction(G, 'File', 'gravityVector', 'Vars', [theta; m; g; L; D], 'Outputs', {'G'});
-    matlabFunction(K, 'File', 'elasticMatrix', 'Vars', k, 'Outputs', {'K'});
-    matlabFunction(Damp, 'File', 'dampingMatrix', 'Vars', beta, 'Outputs', {'D'});
-    matlabFunction(C, 'File', 'coriolisMatrix', 'Vars', [theta; theta_dot; m; L; D], 'Outputs', {'C'});
+if(save_functions)
+    matlabFunction(B, 'File', 'originInertiaMatrix', 'Vars', [theta; m; L; D], 'Outputs', {'B'});
+    matlabFunction(G, 'File', 'originGravityVector', 'Vars', [theta; m; g; L; D], 'Outputs', {'G'});
+    matlabFunction(K, 'File', 'originElasticMatrix', 'Vars', k, 'Outputs', {'K'});
+    matlabFunction(Damp, 'File', 'originDampingMatrix', 'Vars', beta, 'Outputs', {'D'});
+    matlabFunction(C, 'File', 'originCoriolisMatrix', 'Vars', [theta; theta_dot; m; L; D], 'Outputs', {'C'});
 end
+
