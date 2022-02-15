@@ -16,8 +16,7 @@ theta_step = 1;
 theta1 = -6*pi:theta_step:6*pi;
 
 theta0 = zeros(1, length(theta1));
-theta_r = zeros(1, length(theta0));
-% theta_r = -6*pi:theta_step:6*pi;
+theta_r = (pi/6)*ones(1, length(theta0));
 
 theta = [theta_r; theta0; theta1];
 

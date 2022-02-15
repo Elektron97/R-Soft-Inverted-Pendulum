@@ -72,6 +72,9 @@ rho = m*dirac(s-1);
 % rho = m;
 B = simplify(int( int(rho*(J_sd')*J_sd, d, [-0.5 0.5]), s, [0 1]));
 
+% %%%%%%Test Determinant%%%%%%
+% detB = det(B(1, 1) - B(1, 2:3)*inv(B(2:3, 2:3))*B(2:3, 1))*det(B(2:3, 2:3));
+
 %% Gravity Vector
 gravity_field = int( int(rho*g*(sin(phi)*p_sd(1) + cos(phi)*p_sd(2)), d, [-0.5 0.5]), s, [0 1]);
 

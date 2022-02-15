@@ -30,7 +30,6 @@ theta_dot = theta_dot_init;
 tau_r = 0;
 
 %% Dynamics Matrix Validation
-% %Perche' le mie vengono la meta'????????
 % myB = originInertiaMatrix(theta(2), theta(3), m, L, D)
 % Bs = B_fcn(theta(2:3))
 % Br = inertiaMatrix(theta(1), theta(2), theta(3), m, L, D)
