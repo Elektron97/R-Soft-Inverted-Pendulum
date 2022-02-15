@@ -67,14 +67,20 @@ twist_s = J_sd * theta_dot;
 if(save_function)
     matlabFunction(J_sd, 'File', 'jacobianSoft', 'Vars', [theta; s; d; L; D], 'Outputs', {'J'});
 end
+
+
+
 %% Inertia Matrix
 rho = m*dirac(s-1);
 % rho = m;
 B = simplify(int( int(rho*(J_sd')*J_sd, d, [-0.5 0.5]), s, [0 1]));
 
-% %%%%%%Test Determinant%%%%%%
-% detB = det(B(1, 1) - B(1, 2:3)*inv(B(2:3, 2:3))*B(2:3, 1))*det(B(2:3, 2:3));
+%% Test B rotazionale
+A = [s; s^2/2];
+A_r = [1; A];
 
+B_rot = simplify(int( int(rho*(p_sd(1)^2 + p_sd(2)^2)*A_r*(A_r'), d, [-0.5 0.5]), s, [0 1]));
+% matlabFunction(B_rot, 'File', 'rotInertiaMatrix', 'Vars', [theta; m; L; D], 'Outputs', {'B'});
 %% Gravity Vector
 gravity_field = int( int(rho*g*(sin(phi)*p_sd(1) + cos(phi)*p_sd(2)), d, [-0.5 0.5]), s, [0 1]);
 
