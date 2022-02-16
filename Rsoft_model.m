@@ -29,11 +29,11 @@ K = theta0 + theta1*s;
 %% Orientation of SoR {Ss} w.r.t. {S0}
 alpha = int(K, s, 0, s);
 
-fresn_sin1 = fresnels((theta0 + s*theta1)/(sqrt(pi*theta1)));
-fresn_sin2 = fresnels(theta0/sqrt(pi*theta1));
+fresn_sin1 = fresnels( (theta0 + s*theta1) *  sqrt(1/(pi*theta1)) );
+fresn_sin2 = fresnels(theta0 *  sqrt(1/(pi*theta1)) );
 
-fresn_cos1 = fresnelc((theta0 + s*theta1)/(sqrt(pi*theta1)));
-fresn_cos2 = fresnelc(theta0/sqrt(pi*theta1));
+fresn_cos1 = fresnelc((theta0 + s*theta1) * sqrt(1/(pi*theta1)));
+fresn_cos2 = fresnelc(theta0 * sqrt(1/(pi*theta1)) );
 
 x_s = L*(sin((theta0^2)/(2*theta1)) * sqrt(pi/theta1) * (fresn_cos1 - fresn_cos2) ...
      - cos((theta0^2)/(2*theta1)) * sqrt(pi/theta1) * (fresn_sin1 - fresn_sin2));
@@ -68,19 +68,17 @@ if(save_function)
     matlabFunction(J_sd, 'File', 'jacobianSoft', 'Vars', [theta; s; d; L; D], 'Outputs', {'J'});
 end
 
-
-
 %% Inertia Matrix
 rho = m*dirac(s-1);
 % rho = m;
 B = simplify(int( int(rho*(J_sd')*J_sd, d, [-0.5 0.5]), s, [0 1]));
 
 %% Test B rotazionale
-A = [s; s^2/2];
-A_r = [1; A];
-
-B_rot = simplify(int( int(rho*(p_sd(1)^2 + p_sd(2)^2)*A_r*(A_r'), d, [-0.5 0.5]), s, [0 1]));
-% matlabFunction(B_rot, 'File', 'rotInertiaMatrix', 'Vars', [theta; m; L; D], 'Outputs', {'B'});
+% A = [s; s^2/2];
+% A_r = [1; A];
+% 
+% B_rot = simplify(int( int(rho*(p_sd(1)^2 + p_sd(2)^2)*A_r*(A_r'), d, [-0.5 0.5]), s, [0 1]));
+% % matlabFunction(B_rot, 'File', 'rotInertiaMatrix', 'Vars', [theta; m; L; D], 'Outputs', {'B'});
 %% Gravity Vector
 gravity_field = int( int(rho*g*(sin(phi)*p_sd(1) + cos(phi)*p_sd(2)), d, [-0.5 0.5]), s, [0 1]);
 
@@ -96,6 +94,18 @@ K = k*blkdiag(0, H2);
 Damp = beta*blkdiag(0, H2);
 %% Coriolis
 C = christoffel(B, theta, theta_dot);
+
+%% Equilibri
+%Stiffness Matrix
+potential = G + K*theta;
+
+for i = 1:length(potential)
+    for j = 1: length(theta)
+        Stiff_Mat(i, j) = diff(potential(i), theta(j));
+    end
+end
+
+Stiff_Mat_eq = eval(eval(subs(simplify(Stiff_Mat), theta, 1e-5*ones(3, 1))));
 
 %% Save Functions
 if(save_function)

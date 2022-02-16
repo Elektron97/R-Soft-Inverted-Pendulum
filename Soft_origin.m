@@ -7,7 +7,6 @@ clc
 addpath("my_functions");
 
 save_functions = false;
-alternative = true;
 %% Declare Symbolic Variables
 syms theta0 theta1 real
 syms theta0_dot theta1_dot real
@@ -26,11 +25,11 @@ K = theta0 + theta1*s;
 %% Orientation of SoR {Ss} w.r.t. {S0}
 alpha = int(K, s, 0, s);
 
-fresn_sin1 = fresnels((theta0 + s*theta1)/(sqrt(pi*theta1)));
-fresn_sin2 = fresnels(theta0/sqrt(pi*theta1));
+fresn_sin1 = fresnels( (theta0 + s*theta1) *  sqrt(1/(pi*theta1)) );
+fresn_sin2 = fresnels(theta0 *  sqrt(1/(pi*theta1)) );
 
-fresn_cos1 = fresnelc((theta0 + s*theta1)/(sqrt(pi*theta1)));
-fresn_cos2 = fresnelc(theta0/sqrt(pi*theta1));
+fresn_cos1 = fresnelc((theta0 + s*theta1) * sqrt(1/(pi*theta1)));
+fresn_cos2 = fresnelc(theta0 * sqrt(1/(pi*theta1)) );
 
 x_s = L*(sin((theta0^2)/(2*theta1)) * sqrt(pi/theta1) * (fresn_cos1 - fresn_cos2) ...
      - cos((theta0^2)/(2*theta1)) * sqrt(pi/theta1) * (fresn_sin1 - fresn_sin2));
@@ -59,36 +58,9 @@ J_sd = simplify(J_sd);
 
 twist_s = J_sd * theta_dot;
 
-%% Test Formulazione Alternativa
-if(alternative)
-    syms theta_r real
-    Rr = my_rot(theta_r, 'z');
-    dRr = diff(Rr(1:2, 1:2), theta_r);
-    
-    JsdR = simplify([dRr*p_sd(1:2), Rr(1:2, 1:2)*J_sd]);
-    %Verificata!
-    eval(subs(JsdR, [theta_r; theta; s; d; L; D], [0; pi/4; -pi/4; 1; 0; 1; 0.1]));
-    jacobianSoft(0, pi/4, -pi/4, 1, 0, 1, 0.1);
-end
-
 %% Inertia Matrix
 rho = m*dirac(s-1);
 B = simplify(int( int(rho*(J_sd')*J_sd, d, [-0.5 0.5]), s, [0 1]));
-
-%% Formulazione Alternativa Inerzia
-if(alternative)
-    Brr = p_sd(1)^2 + p_sd(2)^2;
-    Bro = p_sd(1:2)'*[0 1; -1 0]*J_sd;
-    Bor = Bro';
-    Boo = (J_sd')*J_sd;
-    
-    Br = simplify(int( int(rho*[Brr Bro; Bor Boo], d, [-0.5 0.5]), s, [0 1]));
-    
-    %Verificata!
-    eval(subs(Br, [theta_r; theta; m; L; D], [pi/4; 1e-5; 1e-5; 1; 1; 0.1]))
-    inertiaMatrix(pi/4, 1e-5, 1e-5, 1, 1, 0.1)
-end
-
 
 %% Gravity Vector
 gravity_field = int( int(rho*g*(sin(phi)*p_sd(1) + cos(phi)*p_sd(2)), d, [-0.5 0.5]), s, [0 1]);
@@ -105,6 +77,23 @@ K = k*H2;
 Damp = beta*H2;
 %% Coriolis
 C = christoffel(B, theta, theta_dot);
+
+%% Equilibri
+%Stiffness Matrix
+potential = G + K*theta;
+
+for i = 1:length(potential)
+    for j = 1: length(theta)
+        Stiff_Mat(i, j) = diff(potential(i), theta(j));
+    end
+end
+
+Stiff_Mat_eq = eval(eval(subs(Stiff_Mat, theta, (1e-5)*ones(length(theta), 1))));
+
+% %Definita positiva
+% det(eval(eval(Stiff_Mat_eq(1, 1)))) > 0
+% det(eval(eval(Stiff_Mat_eq(1:2, 1:2)))) > 0
+% det(eval(eval(Stiff_Mat_eq))) > 0
 
 %% Save Functions
 if(save_functions)

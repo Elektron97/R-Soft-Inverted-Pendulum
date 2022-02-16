@@ -9,7 +9,7 @@ end
 
 %Origin Soft Inverted Pendulum
 myB = originInertiaMatrix(theta(1), theta(2), m, L, D);
-myG = originGravityVector(theta(1), theta(2), m, -g, L, D);
+myG = originGravityVector(theta(1), theta(2), m, g, L, D);
 myC = originCoriolisMatrix(theta(1), theta(2), theta_dot(1), theta_dot(2), m, L, D);
 myD = originDampingMatrix(beta);
 myK = originElasticMatrix(k);

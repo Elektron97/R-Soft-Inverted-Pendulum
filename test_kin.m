@@ -8,7 +8,7 @@ addpath("my_functions");
 
 %% Parameters
 L = 1;
-D = 0.05;
+D = 0.1;
 
 %% Curvature Trajectory
 theta_step = 1;
