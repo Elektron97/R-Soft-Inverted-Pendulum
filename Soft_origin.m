@@ -6,7 +6,7 @@ clc
 %% Add Functions
 addpath("my_functions");
 
-save_functions = false;
+save_functions = true;
 %% Declare Symbolic Variables
 syms theta0 theta1 real
 syms theta0_dot theta1_dot real
@@ -20,10 +20,10 @@ syms m k g beta real
 
 phi = 0;
 %% Affine Curvature
-K = theta0 + theta1*s;
+curv = theta0 + theta1*s;
 
 %% Orientation of SoR {Ss} w.r.t. {S0}
-alpha = int(K, s, 0, s);
+alpha = int(curv, s, 0, s);
 
 fresn_sin1 = fresnels( (theta0 + s*theta1) *  sqrt(1/(pi*theta1)) );
 fresn_sin2 = fresnels(theta0 *  sqrt(1/(pi*theta1)) );
@@ -59,7 +59,8 @@ J_sd = simplify(J_sd);
 twist_s = J_sd * theta_dot;
 
 %% Inertia Matrix
-rho = m*dirac(s-1);
+% Fix bug m*heavisde(s - 1) con s = 1 -> m/2
+rho = 2*m*dirac(s-1);
 B = simplify(int( int(rho*(J_sd')*J_sd, d, [-0.5 0.5]), s, [0 1]));
 
 %% Gravity Vector
@@ -78,22 +79,27 @@ Damp = beta*H2;
 %% Coriolis
 C = christoffel(B, theta, theta_dot);
 
-%% Equilibri
-%Stiffness Matrix
-potential = G + K*theta;
+%% Equilibria
+potential = simplify(G + K*theta);
 
+% equilibria_equation = simplify(subs(potential, [m; g; k; L; D], [1; 9.81; 1; 1; 0.1])) == zeros(length(theta), 1);
+% 
+% n_try = 100;
+% 
+% for i = 1:n_try
+%     solutions = vpasolve(equilibria_equation, theta, 'Random', true);
+%     equilibria(i, 1) = wrapToPi(double(solutions.theta0));
+%     equilibria(i, 2) = wrapToPi(double(solutions.theta1));
+% end
+
+% Stiffness Matrix for Stability
 for i = 1:length(potential)
     for j = 1: length(theta)
         Stiff_Mat(i, j) = diff(potential(i), theta(j));
     end
 end
 
-Stiff_Mat_eq = eval(eval(subs(Stiff_Mat, theta, (1e-5)*ones(length(theta), 1))));
-
-% %Definita positiva
-% det(eval(eval(Stiff_Mat_eq(1, 1)))) > 0
-% det(eval(eval(Stiff_Mat_eq(1:2, 1:2)))) > 0
-% det(eval(eval(Stiff_Mat_eq))) > 0
+Stiff_Mat_origin = eval(eval(subs(Stiff_Mat, theta, (1e-5)*ones(length(theta), 1))));
 
 %% Save Functions
 if(save_functions)

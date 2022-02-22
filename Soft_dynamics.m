@@ -1,9 +1,10 @@
 function ddx = Soft_dynamics(theta, theta_dot, tau, m, g, L, D, k, beta)
 
+thresh = 1e-5;
 %No Identically Zero
 for i = 1:length(theta)
-   if(abs(theta(i)) < 1e-5)
-       theta(i) = 1e-5;
+   if(abs(theta(i)) < thresh)
+       theta(i) = thresh;
    end
 end
 

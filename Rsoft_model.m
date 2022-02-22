@@ -6,7 +6,7 @@ clc
 %% Add Functions
 addpath("my_functions");
 
-save_function = false;
+save_function = true;
 %% Declare Symbolic Variables
 syms theta_r theta0 theta1 real
 syms theta_r_dot theta0_dot theta1_dot real
@@ -16,7 +16,7 @@ syms L D real
 theta = [theta_r; theta0; theta1];
 theta_dot = [theta_r_dot; theta0_dot; theta1_dot];
 
-syms m k g beta real
+syms m k g beta beta_r real
 
 phi = 0;
 %% Orientation of SoR {S0} w.r.t. {I}
@@ -69,8 +69,10 @@ if(save_function)
 end
 
 %% Inertia Matrix
-rho = m*dirac(s-1);
+%Fix dirac bug
+rho = 2*m*dirac(s-1);
 % rho = m;
+
 B = simplify(int( int(rho*(J_sd')*J_sd, d, [-0.5 0.5]), s, [0 1]));
 
 %% Test B rotazionale
@@ -91,13 +93,27 @@ end
 H2 = henkelMatrix(2);
 
 K = k*blkdiag(0, H2);
-Damp = beta*blkdiag(0, H2);
+Damp = blkdiag(beta_r, beta*H2);
 %% Coriolis
 C = christoffel(B, theta, theta_dot);
 
 %% Equilibri
-%Stiffness Matrix
-potential = G + K*theta;
+potential = simplify(G + K*theta);
+
+% equilibria_equation = simplify(subs(potential, [m; g; k; L; D], [1; 9.81; 1; 1; 0.1])) == zeros(length(theta), 1);
+% 
+% n_try = 100;
+% 
+% for i = 1:n_try
+%     solutions = vpasolve(equilibria_equation, theta, 'Random', true);
+%     equilibria(i, 1) = wrapToPi(double(solutions.theta_r));
+%     equilibria(i, 2) = wrapToPi(double(solutions.theta0));
+%     equilibria(i, 3) = wrapToPi(double(solutions.theta1));
+% end
+
+% disp("Equilibria: theta_R = " + num2str(wrapToPi(double(equilibria.theta_r))) + ...
+%         " theta0 = " + num2str(wrapToPi(double(equilibria.theta0))) + " theta1 = " + ...
+%             num2str(wrapToPi(double(equilibria.theta1))));
 
 for i = 1:length(potential)
     for j = 1: length(theta)
@@ -105,13 +121,13 @@ for i = 1:length(potential)
     end
 end
 
-Stiff_Mat_eq = eval(eval(subs(simplify(Stiff_Mat), theta, 1e-5*ones(3, 1))));
-
+Stiff_Mat_eq1 = eval(eval(subs(simplify(Stiff_Mat), theta, 1e-5*ones(3, 1))));
+Stiff_Mat_eq2 = eval(eval(subs(simplify(Stiff_Mat), theta, [pi; 1e-5; 1e-5])));
 %% Save Functions
 if(save_function)
     matlabFunction(B, 'File', 'inertiaMatrix', 'Vars', [theta; m; L; D], 'Outputs', {'B'});
     matlabFunction(G, 'File', 'gravityVector', 'Vars', [theta; m; g; L; D], 'Outputs', {'G'});
     matlabFunction(K, 'File', 'elasticMatrix', 'Vars', k, 'Outputs', {'K'});
-    matlabFunction(Damp, 'File', 'dampingMatrix', 'Vars', beta, 'Outputs', {'D'});
+    matlabFunction(Damp, 'File', 'dampingMatrix', 'Vars', [beta; beta_r], 'Outputs', {'D'});
     matlabFunction(C, 'File', 'coriolisMatrix', 'Vars', [theta; theta_dot; m; L; D], 'Outputs', {'C'});
 end
