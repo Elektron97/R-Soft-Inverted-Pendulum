@@ -6,7 +6,7 @@ clc
 %% Add Functions
 addpath("my_functions");
 
-save_function = true;
+save_function = false;
 %% Declare Symbolic Variables
 syms theta_r theta0 theta1 real
 syms theta_r_dot theta0_dot theta1_dot real
@@ -63,11 +63,6 @@ end
 J_sd = simplify(J_sd);
 
 twist_s = J_sd * theta_dot;
-
-if(save_function)
-    matlabFunction(J_sd, 'File', 'jacobianSoft', 'Vars', [theta; s; d; L; D], 'Outputs', {'J'});
-end
-
 %% Inertia Matrix
 %Fix dirac bug
 rho = 2*m*dirac(s-1);
@@ -97,32 +92,47 @@ Damp = blkdiag(beta_r, beta*H2);
 %% Coriolis
 C = christoffel(B, theta, theta_dot);
 
-%% Equilibri
-potential = simplify(G + K*theta);
-
-% equilibria_equation = simplify(subs(potential, [m; g; k; L; D], [1; 9.81; 1; 1; 0.1])) == zeros(length(theta), 1);
+%% Equilibria
+% potential = simplify(G + K*theta);
 % 
+% step_tau = 0.1;
+% 
+% % tau_r = -5:step_tau:5;
+% rigid = 1e-5:0.5:10;
+% tau_r = 0;
 % n_try = 100;
+% for i = 1:length(rigid)
+%     equilibria_equation = simplify(subs(potential, [m; g; k; L; D], [1; 9.81; rigid(i); 1; 0.1])) == [1; 0; 0]*tau_r;
 % 
-% for i = 1:n_try
-%     solutions = vpasolve(equilibria_equation, theta, 'Random', true);
-%     equilibria(i, 1) = wrapToPi(double(solutions.theta_r));
-%     equilibria(i, 2) = wrapToPi(double(solutions.theta0));
-%     equilibria(i, 3) = wrapToPi(double(solutions.theta1));
+% 
+% 
+%     for j = 1:n_try
+%         solutions = vpasolve(equilibria_equation, theta, 'Random', true);
+% 
+%         if(isempty(solutions.theta_r))
+%             equilibria{i}(j, 1) = nan;
+%             equilibria{i}(j, 2) = nan;
+%             equilibria{i}(j, 3) = nan;
+%         else
+%             equilibria{i}(j, 1) = double(solutions.theta_r);
+%             equilibria{i}(j, 2) = double(solutions.theta0);
+%             equilibria{i}(j, 3) = double(solutions.theta1);
+%         end
+%     end
 % end
 
 % disp("Equilibria: theta_R = " + num2str(wrapToPi(double(equilibria.theta_r))) + ...
 %         " theta0 = " + num2str(wrapToPi(double(equilibria.theta0))) + " theta1 = " + ...
 %             num2str(wrapToPi(double(equilibria.theta1))));
 
-for i = 1:length(potential)
-    for j = 1: length(theta)
-        Stiff_Mat(i, j) = diff(potential(i), theta(j));
-    end
-end
-
-Stiff_Mat_eq1 = eval(eval(subs(simplify(Stiff_Mat), theta, 1e-5*ones(3, 1))));
-Stiff_Mat_eq2 = eval(eval(subs(simplify(Stiff_Mat), theta, [pi; 1e-5; 1e-5])));
+% for i = 1:length(potential)
+%     for j = 1: length(theta)
+%         Stiff_Mat(i, j) = diff(potential(i), theta(j));
+%     end
+% end
+% 
+% Stiff_Mat_eq1 = eval(eval(subs(simplify(Stiff_Mat), theta, 1e-5*ones(3, 1))));
+% Stiff_Mat_eq2 = eval(eval(subs(simplify(Stiff_Mat), theta, [pi; 1e-5; 1e-5])));
 %% Save Functions
 if(save_function)
     matlabFunction(B, 'File', 'inertiaMatrix', 'Vars', [theta; m; L; D], 'Outputs', {'B'});

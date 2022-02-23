@@ -11,7 +11,7 @@ addpath("origin_soft_pendulum");
 L = 1;
 D = 0.1;
 
-m = 2;
+m = 1;
 g = 9.81;
 beta = 0.1;
 k = 1;
