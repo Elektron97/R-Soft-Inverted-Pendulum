@@ -132,9 +132,9 @@ for i = 1:size(THETA0, 1)
         santinaB = B_fcn([theta0_sing; theta1_sing]);
         testBr = inertiaMatrix(THETAR(i, j), theta0_sing, theta1_sing, m, L, D);
         
-%         testB = originInertiaMatrix(THETA0(i, j), THETA1(i, j), m, L, D);
-%         santinaB = B_fcn([THETA0(i, j); THETA1(i, j)]);
-%         testBr = inertiaMatrix(THETAR(i, j), THETA0(i, j), THETA1(i, j), m, L, D);
+        condB(i, j) = cond(real(testB));
+        condSantina(i, j) = cond(real(santinaB));
+        condBr(i, j) = cond(real(testBr));
         
         B11(i, j) = testB(1, 1);
         B12(i, j) = testB(1, 2);
@@ -153,6 +153,8 @@ for i = 1:size(THETA0, 1)
         
     end
 end
+
+%% Plot
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % my B
@@ -259,5 +261,32 @@ s4.EdgeColor = 'none';
 xlabel("\theta_0");
 ylabel("\theta_1");
 zlabel("myBr_{33}");
+view(23, 21);
+
+%%%%%%%%%%%%%%% Condition Number of Inertia Matrix %%%%%%%%%%%%%%%%
+
+figure
+subplot(1, 3, 1)
+s5 = surf(THETA0, THETA1, condB);
+s5.EdgeColor = 'none';
+xlabel("\theta_0");
+ylabel("\theta_1");
+zlabel("Condition Number of myB");
+view(23, 21);
+
+subplot(1, 3, 2)
+s5 = surf(THETA0, THETA1, condSantina);
+s5.EdgeColor = 'none';
+xlabel("\theta_0");
+ylabel("\theta_1");
+zlabel("Condition Number of Santina B");
+view(23, 21);
+
+subplot(1, 3, 3)
+s5 = surf(THETA0, THETA1, condBr);
+s5.EdgeColor = 'none';
+xlabel("\theta_0");
+ylabel("\theta_1");
+zlabel("Condition Number of myBr");
 view(23, 21);
 

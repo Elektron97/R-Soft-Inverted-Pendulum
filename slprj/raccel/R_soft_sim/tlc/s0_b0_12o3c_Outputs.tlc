@@ -1,0 +1,47 @@
+%implements s0_b0_12o3c_Outputs "C"
+
+%function OutputsForTID(block, system, tid) Output
+%if tid == 0
+%assign ::GlobalCurrentTID = 0
+%assign cfgTxt = ""
+%openfile cfgTxt
+%assign localVarDecl = ""
+%assign tlcOutputsFcnOfS0B0 = OpaqueTLCBlockFcn("Outputs", 0, 0, 0, 2, 0)
+%assign tlcOutputsFcnOfS0B1 = OpaqueTLCBlockFcn("Outputs", 0, 1, 0, 2, 1)
+%<SLibGetRootInportsFromFile(system, TLC_FALSE)>
+%<SLibGenerateExtModeOutput(system)>
+rtB.fqds22qytu[0] = rtX.pzjq15fgt1[0];
+rtB.fqds22qytu[1] = rtX.pzjq15fgt1[1];
+rtB.fqds22qytu[2] = rtX.pzjq15fgt1[2];
+%<tlcOutputsFcnOfS0B0>\
+rtB.pn1ce0mshd[0] = rtX.eylzuwuzow[0];
+rtB.pn1ce0mshd[1] = rtX.eylzuwuzow[1];
+rtB.pn1ce0mshd[2] = rtX.eylzuwuzow[2];
+%<tlcOutputsFcnOfS0B1>\
+%<SLibInsertSolverResetCode()>\
+%closefile cfgTxt
+%<cfgTxt>
+%<LibSetSystemField(system, "CachedOutputLocalVars", localVarDecl)>
+%assign ::GlobalCurrentTID = []
+%endif
+%if tid == 1
+%assign ::GlobalCurrentTID = 1
+%assign ::GlobalCurrentTID = []
+%endif
+%endfunction
+%function OutputsFcnProtoTypeForTID(block, system, tid) Output
+%if tid == 0
+%assign ::GlobalCurrentTID = 0
+%assign fcnProtoType = ""
+%openfile fcnProtoType
+static void Outputs0(\
+%assign comma = ""
+%closefile fcnProtoType
+%<SLibCG_SetFcnProtoType(0, 2, fcnProtoType)>
+%assign ::GlobalCurrentTID = []
+%endif
+%if tid == 1
+%assign ::GlobalCurrentTID = 1
+%assign ::GlobalCurrentTID = []
+%endif
+%endfunction

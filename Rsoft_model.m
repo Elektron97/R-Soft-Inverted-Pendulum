@@ -93,33 +93,34 @@ Damp = blkdiag(beta_r, beta*H2);
 C = christoffel(B, theta, theta_dot);
 
 %% Equilibria
-% potential = simplify(G + K*theta);
-% 
-% step_tau = 0.1;
-% 
-% % tau_r = -5:step_tau:5;
+potential = simplify(G + K*theta);
+
+step_tau = 0.5;
+
+tau_r = -10:step_tau:10;
 % rigid = 1e-5:0.5:10;
-% tau_r = 0;
-% n_try = 100;
-% for i = 1:length(rigid)
-%     equilibria_equation = simplify(subs(potential, [m; g; k; L; D], [1; 9.81; rigid(i); 1; 0.1])) == [1; 0; 0]*tau_r;
-% 
-% 
-% 
-%     for j = 1:n_try
-%         solutions = vpasolve(equilibria_equation, theta, 'Random', true);
-% 
-%         if(isempty(solutions.theta_r))
-%             equilibria{i}(j, 1) = nan;
-%             equilibria{i}(j, 2) = nan;
-%             equilibria{i}(j, 3) = nan;
-%         else
-%             equilibria{i}(j, 1) = double(solutions.theta_r);
-%             equilibria{i}(j, 2) = double(solutions.theta0);
-%             equilibria{i}(j, 3) = double(solutions.theta1);
-%         end
-%     end
-% end
+n_try = 100;
+for i = 1:length(tau_r)
+    equilibria_equation = simplify(subs(potential, [m; g; k; L; D], [1; 9.81; 1; 1; 0.1])) == [1; 0; 0]*tau_r(i);
+
+
+
+    for j = 1:n_try
+        solutions = vpasolve(equilibria_equation, theta, 'Random', true);
+
+        if(isempty(solutions.theta_r))
+            equilibria{i}(j, 1) = nan;
+            equilibria{i}(j, 2) = nan;
+            equilibria{i}(j, 3) = nan;
+        else
+            equilibria{i}(j, 1) = double(solutions.theta_r);
+            equilibria{i}(j, 2) = double(solutions.theta0);
+            equilibria{i}(j, 3) = double(solutions.theta1);
+        end
+    end
+end
+
+save("equilibria_tau.mat", "equilibria");
 
 % disp("Equilibria: theta_R = " + num2str(wrapToPi(double(equilibria.theta_r))) + ...
 %         " theta0 = " + num2str(wrapToPi(double(equilibria.theta0))) + " theta1 = " + ...
