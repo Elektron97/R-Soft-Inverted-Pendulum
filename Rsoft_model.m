@@ -65,10 +65,11 @@ J_sd = simplify(J_sd);
 twist_s = J_sd * theta_dot;
 %% Inertia Matrix
 %Fix dirac bug
-rho = 2*m*dirac(s-1);
-% rho = m;
+% rho = 2*m*dirac(s-1);
+rho = m;
 
-B = simplify(int( int(rho*(J_sd')*J_sd, d, [-0.5 0.5]), s, [0 1]));
+B = int( int(rho*(J_sd')*J_sd, d, [-0.5 0.5]), s, [0 1]);
+disp("Matrice di Inerzia Calcolata!");
 
 %% Test B rotazionale
 % A = [s; s^2/2];
@@ -81,8 +82,10 @@ gravity_field = int( int(rho*g*(sin(phi)*p_sd(1) + cos(phi)*p_sd(2)), d, [-0.5 0
 
 G = sym(zeros(length(theta), 1));
 for i = 1:length(theta)
-    G(i) = simplify(diff(gravity_field, theta(i)));
+    G(i) = diff(gravity_field, theta(i));
 end
+
+disp("Gravità Calcolata!");
 
 %% Elastic and Damping
 H2 = henkelMatrix(2);
@@ -91,36 +94,37 @@ K = k*blkdiag(0, H2);
 Damp = blkdiag(beta_r, beta*H2);
 %% Coriolis
 C = christoffel(B, theta, theta_dot);
+disp("Matrice di Coriolis Calcolata!");
 
 %% Equilibria
-potential = simplify(G + K*theta);
-
-step_tau = 0.5;
-
-tau_r = -10:step_tau:10;
-% rigid = 1e-5:0.5:10;
-n_try = 100;
-for i = 1:length(tau_r)
-    equilibria_equation = simplify(subs(potential, [m; g; k; L; D], [1; 9.81; 1; 1; 0.1])) == [1; 0; 0]*tau_r(i);
-
-
-
-    for j = 1:n_try
-        solutions = vpasolve(equilibria_equation, theta, 'Random', true);
-
-        if(isempty(solutions.theta_r))
-            equilibria{i}(j, 1) = nan;
-            equilibria{i}(j, 2) = nan;
-            equilibria{i}(j, 3) = nan;
-        else
-            equilibria{i}(j, 1) = double(solutions.theta_r);
-            equilibria{i}(j, 2) = double(solutions.theta0);
-            equilibria{i}(j, 3) = double(solutions.theta1);
-        end
-    end
-end
-
-save("equilibria_tau.mat", "equilibria");
+% potential = simplify(G + K*theta);
+% 
+% step_tau = 0.5;
+% 
+% tau_r = -10:step_tau:10;
+% % rigid = 1e-5:0.5:10;
+% n_try = 100;
+% for i = 1:length(tau_r)
+%     equilibria_equation = simplify(subs(potential, [m; g; k; L; D], [1; 9.81; 1; 1; 0.1])) == [1; 0; 0]*tau_r(i);
+% 
+% 
+% 
+%     for j = 1:n_try
+%         solutions = vpasolve(equilibria_equation, theta, 'Random', true);
+% 
+%         if(isempty(solutions.theta_r))
+%             equilibria{i}(j, 1) = nan;
+%             equilibria{i}(j, 2) = nan;
+%             equilibria{i}(j, 3) = nan;
+%         else
+%             equilibria{i}(j, 1) = double(solutions.theta_r);
+%             equilibria{i}(j, 2) = double(solutions.theta0);
+%             equilibria{i}(j, 3) = double(solutions.theta1);
+%         end
+%     end
+% end
+% 
+% save("equilibria_tau.mat", "equilibria");
 
 % disp("Equilibria: theta_R = " + num2str(wrapToPi(double(equilibria.theta_r))) + ...
 %         " theta0 = " + num2str(wrapToPi(double(equilibria.theta0))) + " theta1 = " + ...
@@ -136,9 +140,15 @@ save("equilibria_tau.mat", "equilibria");
 % Stiff_Mat_eq2 = eval(eval(subs(simplify(Stiff_Mat), theta, [pi; 1e-5; 1e-5])));
 %% Save Functions
 if(save_function)
-    matlabFunction(B, 'File', 'inertiaMatrix', 'Vars', [theta; m; L; D], 'Outputs', {'B'});
-    matlabFunction(G, 'File', 'gravityVector', 'Vars', [theta; m; g; L; D], 'Outputs', {'G'});
-    matlabFunction(K, 'File', 'elasticMatrix', 'Vars', k, 'Outputs', {'K'});
-    matlabFunction(Damp, 'File', 'dampingMatrix', 'Vars', [beta; beta_r], 'Outputs', {'D'});
-    matlabFunction(C, 'File', 'coriolisMatrix', 'Vars', [theta; theta_dot; m; L; D], 'Outputs', {'C'});
+%     matlabFunction(B, 'File', 'inertiaMatrix', 'Vars', [theta; m; L; D], 'Outputs', {'B'});
+%     matlabFunction(G, 'File', 'gravityVector', 'Vars', [theta; m; g; L; D], 'Outputs', {'G'});
+%     matlabFunction(K, 'File', 'elasticMatrix', 'Vars', k, 'Outputs', {'K'});
+%     matlabFunction(Damp, 'File', 'dampingMatrix', 'Vars', [beta; beta_r], 'Outputs', {'D'});
+%     matlabFunction(C, 'File', 'coriolisMatrix', 'Vars', [theta; theta_dot; m; L; D], 'Outputs', {'C'});
+    
+    matlabFunction(B, 'File', 'uniformInertiaMatrix', 'Vars', [theta; m; L; D], 'Outputs', {'B'});
+    matlabFunction(G, 'File', 'uniformGravityVector', 'Vars', [theta; m; g; L; D], 'Outputs', {'G'});
+    matlabFunction(K, 'File', 'uniformElasticMatrix', 'Vars', k, 'Outputs', {'K'});
+    matlabFunction(Damp, 'File', 'uniformDampingMatrix', 'Vars', [beta; beta_r], 'Outputs', {'D'});
+    matlabFunction(C, 'File', 'uniformCoriolisMatrix', 'Vars', [theta; theta_dot; m; L; D], 'Outputs', {'C'});
 end
