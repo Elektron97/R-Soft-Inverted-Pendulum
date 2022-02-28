@@ -7,10 +7,6 @@ clc
 load("equilibria.mat");
 
 %% Filter Equilibria
-theta_r_eq = [];
-theta0_eq = [];
-theta1_eq = [];
-
 for i = 1:length(equilibria)
    filtered_equilibria{i} = filterEquilibria(equilibria{i});
 end

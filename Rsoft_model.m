@@ -65,18 +65,12 @@ J_sd = simplify(J_sd);
 twist_s = J_sd * theta_dot;
 %% Inertia Matrix
 %Fix dirac bug
-% rho = 2*m*dirac(s-1);
-rho = m;
+rho = 2*m*dirac(s-1);
+% rho = m;
 
 B = int( int(rho*(J_sd')*J_sd, d, [-0.5 0.5]), s, [0 1]);
 disp("Matrice di Inerzia Calcolata!");
 
-%% Test B rotazionale
-% A = [s; s^2/2];
-% A_r = [1; A];
-% 
-% B_rot = simplify(int( int(rho*(p_sd(1)^2 + p_sd(2)^2)*A_r*(A_r'), d, [-0.5 0.5]), s, [0 1]));
-% % matlabFunction(B_rot, 'File', 'rotInertiaMatrix', 'Vars', [theta; m; L; D], 'Outputs', {'B'});
 %% Gravity Vector
 gravity_field = int( int(rho*g*(sin(phi)*p_sd(1) + cos(phi)*p_sd(2)), d, [-0.5 0.5]), s, [0 1]);
 
@@ -138,17 +132,39 @@ disp("Matrice di Coriolis Calcolata!");
 % 
 % Stiff_Mat_eq1 = eval(eval(subs(simplify(Stiff_Mat), theta, 1e-5*ones(3, 1))));
 % Stiff_Mat_eq2 = eval(eval(subs(simplify(Stiff_Mat), theta, [pi; 1e-5; 1e-5])));
+
+%% Linearization for Stability
+% State Space Model
+x1 = theta;
+x2 = theta_dot;
+
+x = [x1; x2];
+
+inv_B = inv(B);
+
+F = [x2; -inv_B*(C*x2 + K*x1 + Damp*x2 + G)];
+G = [zeros(3, 1); inv_B*[1; 0; 0]];
+
+A = jacobian(F, x);
+disp("Matrice di transizione di stato calcolata!");
+
+% Testing with equilibria of autonomous system
+A_origin = subs(A, x, [1e-5*ones(length(x1), 1); zeros(length(x2), 1)]);
+disp("Subs effettuato");
+
+eig_origin = eig(A_origin);
+% matlabFunction(A, 'File', 'A_lin', 'Vars', [theta; theta_dot; m; g; k; L; D; beta; beta_r], 'Outputs', {'A'}, 'Optimize', false)
 %% Save Functions
 if(save_function)
-%     matlabFunction(B, 'File', 'inertiaMatrix', 'Vars', [theta; m; L; D], 'Outputs', {'B'});
-%     matlabFunction(G, 'File', 'gravityVector', 'Vars', [theta; m; g; L; D], 'Outputs', {'G'});
-%     matlabFunction(K, 'File', 'elasticMatrix', 'Vars', k, 'Outputs', {'K'});
-%     matlabFunction(Damp, 'File', 'dampingMatrix', 'Vars', [beta; beta_r], 'Outputs', {'D'});
-%     matlabFunction(C, 'File', 'coriolisMatrix', 'Vars', [theta; theta_dot; m; L; D], 'Outputs', {'C'});
+    matlabFunction(B, 'File', 'inertiaMatrix', 'Vars', [theta; m; L; D], 'Outputs', {'B'});
+    matlabFunction(G, 'File', 'gravityVector', 'Vars', [theta; m; g; L; D], 'Outputs', {'G'});
+    matlabFunction(K, 'File', 'elasticMatrix', 'Vars', k, 'Outputs', {'K'});
+    matlabFunction(Damp, 'File', 'dampingMatrix', 'Vars', [beta; beta_r], 'Outputs', {'D'});
+    matlabFunction(C, 'File', 'coriolisMatrix', 'Vars', [theta; theta_dot; m; L; D], 'Outputs', {'C'});
     
-    matlabFunction(B, 'File', 'uniformInertiaMatrix', 'Vars', [theta; m; L; D], 'Outputs', {'B'});
-    matlabFunction(G, 'File', 'uniformGravityVector', 'Vars', [theta; m; g; L; D], 'Outputs', {'G'});
-    matlabFunction(K, 'File', 'uniformElasticMatrix', 'Vars', k, 'Outputs', {'K'});
-    matlabFunction(Damp, 'File', 'uniformDampingMatrix', 'Vars', [beta; beta_r], 'Outputs', {'D'});
-    matlabFunction(C, 'File', 'uniformCoriolisMatrix', 'Vars', [theta; theta_dot; m; L; D], 'Outputs', {'C'});
+%     matlabFunction(B, 'File', 'uniformInertiaMatrix', 'Vars', [theta; m; L; D], 'Outputs', {'B'});
+%     matlabFunction(G, 'File', 'uniformGravityVector', 'Vars', [theta; m; g; L; D], 'Outputs', {'G'});
+%     matlabFunction(K, 'File', 'uniformElasticMatrix', 'Vars', k, 'Outputs', {'K'});
+%     matlabFunction(Damp, 'File', 'uniformDampingMatrix', 'Vars', [beta; beta_r], 'Outputs', {'D'});
+%     matlabFunction(C, 'File', 'uniformCoriolisMatrix', 'Vars', [theta; theta_dot; m; L; D], 'Outputs', {'C'});
 end
