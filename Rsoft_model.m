@@ -68,7 +68,7 @@ twist_s = J_sd * theta_dot;
 rho = 2*m*dirac(s-1);
 % rho = m;
 
-B = int( int(rho*(J_sd')*J_sd, d, [-0.5 0.5]), s, [0 1]);
+B =simplify( int( int(rho*(J_sd')*J_sd, d, [-0.5 0.5]), s, [0 1]) );
 disp("Matrice di Inerzia Calcolata!");
 
 %% Gravity Vector
@@ -76,7 +76,7 @@ gravity_field = int( int(rho*g*(sin(phi)*p_sd(1) + cos(phi)*p_sd(2)), d, [-0.5 0
 
 G = sym(zeros(length(theta), 1));
 for i = 1:length(theta)
-    G(i) = diff(gravity_field, theta(i));
+    G(i) = simplify(diff(gravity_field, theta(i)));
 end
 
 disp("Gravità Calcolata!");
@@ -120,10 +120,6 @@ disp("Matrice di Coriolis Calcolata!");
 % 
 % save("equilibria_tau.mat", "equilibria");
 
-% disp("Equilibria: theta_R = " + num2str(wrapToPi(double(equilibria.theta_r))) + ...
-%         " theta0 = " + num2str(wrapToPi(double(equilibria.theta0))) + " theta1 = " + ...
-%             num2str(wrapToPi(double(equilibria.theta1))));
-
 % for i = 1:length(potential)
 %     for j = 1: length(theta)
 %         Stiff_Mat(i, j) = diff(potential(i), theta(j));
@@ -140,20 +136,14 @@ x2 = theta_dot;
 
 x = [x1; x2];
 
-inv_B = inv(B);
+inv_B = simplify(inv(B));
 
 F = [x2; -inv_B*(C*x2 + K*x1 + Damp*x2 + G)];
 G = [zeros(3, 1); inv_B*[1; 0; 0]];
 
 A = jacobian(F, x);
 disp("Matrice di transizione di stato calcolata!");
-
-% Testing with equilibria of autonomous system
-A_origin = subs(A, x, [1e-5*ones(length(x1), 1); zeros(length(x2), 1)]);
-disp("Subs effettuato");
-
-eig_origin = eig(A_origin);
-% matlabFunction(A, 'File', 'A_lin', 'Vars', [theta; theta_dot; m; g; k; L; D; beta; beta_r], 'Outputs', {'A'}, 'Optimize', false)
+matlabFunction(A, 'File', 'A_lin', 'Vars', [theta; theta_dot; m; g; k; L; D; beta; beta_r], 'Outputs', {'A'})
 %% Save Functions
 if(save_function)
     matlabFunction(B, 'File', 'inertiaMatrix', 'Vars', [theta; m; L; D], 'Outputs', {'B'});
