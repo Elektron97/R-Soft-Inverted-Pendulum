@@ -11,9 +11,15 @@ for i = 1:length(equilibria)
    filtered_equilibria{i} = filterEquilibria(equilibria{i});
 end
 
-%% Plot Equilibria
+%% Stability Properties
 tau_r = -5:0.1:5;
 
+for i = 1:length(tau_r)
+    for j = 1:size(filtered_equilibria{i}, 1)     
+        stability{i}(j) = isHurwitz(A_lin(filtered_equilibria{i}(j, :)', 1, 9.81, 1, 1, 0.1, 0.1, 0.5)); 
+    end
+end
+%% Plot Equilibria
 f1 = figure;
 f2 = figure;
 f3 = figure;
@@ -21,37 +27,99 @@ f3 = figure;
 for i = 1:length(tau_r)
     figure(f1)
     hold on
-    for j = 1:size(filtered_equilibria{i}, 1)
-        plot(tau_r(i), wrapToPi(filtered_equilibria{i}(j, 1)), 'rx')
+    for j = 1:size(filtered_equilibria{i}, 1)  
+        
+        switch(stability{i}(j))
+            case -1
+                plot(tau_r(i), wrapToPi(filtered_equilibria{i}(j, 1)), 'rx')
+                
+            case 0
+                plot(tau_r(i), wrapToPi(filtered_equilibria{i}(j, 1)), 'gx')
+                
+            case 1
+                plot(tau_r(i), wrapToPi(filtered_equilibria{i}(j, 1)), 'bx')
+        end 
     end
-    grid on
-    title("Equilibria: \theta_r")
-    xlabel("\tau")
-    ylabel("\theta_r [rad]")
-    hold off
+%     grid on
+%     title("Equilibria: \theta_r")
+%     xlabel("\tau")
+%     ylabel("\theta_r [rad]")
+%     hold off
+%     legend("Instable", "Stable")
 
     figure(f2)
     hold on
     for j = 1:size(filtered_equilibria{i}, 1)
-        plot(tau_r(i), filtered_equilibria{i}(j, 2), 'rx')
+        
+        switch(stability{i}(j))
+            case -1
+                plot(tau_r(i), filtered_equilibria{i}(j, 2), 'rx')
+                
+            case 0
+                plot(tau_r(i), filtered_equilibria{i}(j, 2), 'gx')
+                
+            case 1
+                plot(tau_r(i), filtered_equilibria{i}(j, 2), 'bx')
+        end 
+        
     end
-    grid on
-    title("Equilibria: \theta_0")
-    xlabel("\tau")
-    ylabel("\theta_0 [rad]")
-    hold off
+%     grid on
+%     title("Equilibria: \theta_0")
+%     xlabel("\tau")
+%     ylabel("\theta_0 [rad]")
+%     hold off
+%     legend("Instable", "Stable")
 
     figure(f3)
     hold on
     for j = 1:size(filtered_equilibria{i}, 1)
-        plot(tau_r(i), filtered_equilibria{i}(j, 3), 'rx')
+        
+        switch(stability{i}(j))
+            case -1
+                plot(tau_r(i), filtered_equilibria{i}(j, 3), 'rx')
+                
+            case 0
+                plot(tau_r(i), filtered_equilibria{i}(j, 3), 'gx')
+                
+            case 1
+                plot(tau_r(i), filtered_equilibria{i}(j, 3), 'bx')
+        end 
+        
     end
-    grid on
-    title("Equilibria: \theta_1")
-    xlabel("\tau")
-    ylabel("\theta_1 [rad]")
-    hold off
+%     grid on
+%     title("Equilibria: \theta_1")
+%     xlabel("\tau")
+%     ylabel("\theta_1 [rad]")
+%     hold off
+%     legend("Unstable", "Stable")
 end
+
+figure(f1)
+grid on
+title("Equilibria: \theta_r")
+xlabel("\tau")
+ylabel("\theta_r [rad]")
+hold off
+legend("Unstable", "Stable")
+
+figure(f2)
+grid on
+title("Equilibria: \theta_0")
+xlabel("\tau")
+ylabel("\theta_0 [rad]")
+hold off
+legend("Unstable", "Stable")
+
+figure(f3)
+grid on
+title("Equilibria: \theta_1")
+xlabel("\tau")
+ylabel("\theta_1 [rad]")
+hold off
+legend("Unstable", "Stable")
+
+
+
 
 %% Rigid
 % load("equilibria_elastic.mat");

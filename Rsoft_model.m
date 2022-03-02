@@ -71,6 +71,9 @@ rho = 2*m*dirac(s-1);
 B =simplify( int( int(rho*(J_sd')*J_sd, d, [-0.5 0.5]), s, [0 1]) );
 disp("Matrice di Inerzia Calcolata!");
 
+% invB = inv(B);
+% diff_invB = jacobian(inv(B)*[1;0; 0], theta);
+
 %% Gravity Vector
 gravity_field = int( int(rho*g*(sin(phi)*p_sd(1) + cos(phi)*p_sd(2)), d, [-0.5 0.5]), s, [0 1]);
 
@@ -91,8 +94,8 @@ C = christoffel(B, theta, theta_dot);
 disp("Matrice di Coriolis Calcolata!");
 
 %% Equilibria
-% potential = simplify(G + K*theta);
-% 
+potential = simplify(G + K*theta);
+
 % step_tau = 0.5;
 % 
 % tau_r = -10:step_tau:10;
@@ -120,30 +123,14 @@ disp("Matrice di Coriolis Calcolata!");
 % 
 % save("equilibria_tau.mat", "equilibria");
 
-% for i = 1:length(potential)
-%     for j = 1: length(theta)
-%         Stiff_Mat(i, j) = diff(potential(i), theta(j));
-%     end
-% end
-% 
-% Stiff_Mat_eq1 = eval(eval(subs(simplify(Stiff_Mat), theta, 1e-5*ones(3, 1))));
-% Stiff_Mat_eq2 = eval(eval(subs(simplify(Stiff_Mat), theta, [pi; 1e-5; 1e-5])));
+for i = 1:length(potential)
+    for j = 1: length(theta)
+        Stiff_Mat(i, j) = diff(potential(i), theta(j));
+    end
+end
 
-%% Linearization for Stability
-% State Space Model
-x1 = theta;
-x2 = theta_dot;
-
-x = [x1; x2];
-
-inv_B = simplify(inv(B));
-
-F = [x2; -inv_B*(C*x2 + K*x1 + Damp*x2 + G)];
-G = [zeros(3, 1); inv_B*[1; 0; 0]];
-
-A = jacobian(F, x);
-disp("Matrice di transizione di stato calcolata!");
-matlabFunction(A, 'File', 'A_lin', 'Vars', [theta; theta_dot; m; g; k; L; D; beta; beta_r], 'Outputs', {'A'})
+matlabFunction(Stiff_Mat, 'File', 'stiffMatrix', 'Vars', [theta; m; g; k; L; D], 'Outputs', {'St_Mat'});
+disp("Stiffness Matrix computed");
 %% Save Functions
 if(save_function)
     matlabFunction(B, 'File', 'inertiaMatrix', 'Vars', [theta; m; L; D], 'Outputs', {'B'});
@@ -151,6 +138,7 @@ if(save_function)
     matlabFunction(K, 'File', 'elasticMatrix', 'Vars', k, 'Outputs', {'K'});
     matlabFunction(Damp, 'File', 'dampingMatrix', 'Vars', [beta; beta_r], 'Outputs', {'D'});
     matlabFunction(C, 'File', 'coriolisMatrix', 'Vars', [theta; theta_dot; m; L; D], 'Outputs', {'C'});
+    matlabFunction(Stiff_Mat, 'File', 'stiffMatrix', 'Vars', [theta; m; g; k; L; D], 'Outputs', {'St_Mat'});
     
 %     matlabFunction(B, 'File', 'uniformInertiaMatrix', 'Vars', [theta; m; L; D], 'Outputs', {'B'});
 %     matlabFunction(G, 'File', 'uniformGravityVector', 'Vars', [theta; m; g; L; D], 'Outputs', {'G'});
