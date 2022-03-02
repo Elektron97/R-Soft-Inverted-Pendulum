@@ -3,6 +3,9 @@ clear all
 close all
 clc
 
+%% AddPath functions
+addpath("my_functions");
+
 %% Load Equilibria
 load("equilibria.mat");
 
