@@ -71,9 +71,6 @@ rho = 2*m*dirac(s-1);
 B =simplify( int( int(rho*(J_sd')*J_sd, d, [-0.5 0.5]), s, [0 1]) );
 disp("Matrice di Inerzia Calcolata!");
 
-% invB = inv(B);
-% diff_invB = jacobian(inv(B)*[1;0; 0], theta);
-
 %% Gravity Vector
 gravity_field = int( int(rho*g*(sin(phi)*p_sd(1) + cos(phi)*p_sd(2)), d, [-0.5 0.5]), s, [0 1]);
 
@@ -129,7 +126,7 @@ for i = 1:length(potential)
     end
 end
 
-matlabFunction(Stiff_Mat, 'File', 'stiffMatrix', 'Vars', [theta; m; g; k; L; D], 'Outputs', {'St_Mat'});
+% matlabFunction(Stiff_Mat, 'File', 'stiffMatrix', 'Vars', [theta; m; g; k; L; D], 'Outputs', {'St_Mat'});
 disp("Stiffness Matrix computed");
 %% Save Functions
 if(save_function)
