@@ -20,7 +20,9 @@ tau_r = -5:0.1:5;
 for i = 1:length(tau_r)
     for j = 1:size(filtered_equilibria{i}, 1)     
         stability{i}(j) = isHurwitz(A_lin(filtered_equilibria{i}(j, :)', 1, 9.81, 1, 1, 0.1, 0.1, 0.5)); 
+%         stability{i}(j) = isHurwitz(A_lin2(filtered_equilibria{i}(j, :)', tau_r(i), 1, 9.81, 1, 1, 0.1, 0.1, 0.5)); 
     end
+    disp("Stabilita' per tau_r: " + num2str(tau_r(i)))
 end
 %% Plot Equilibria
 f1 = figure;
@@ -122,71 +124,71 @@ hold off
 legend("Unstable", "Stable")
 
 %% Controllability
-for i = 1:length(tau_r)
-    for j = 1:size(filtered_equilibria{i}, 1)     
-        A = A_lin(filtered_equilibria{i}(j, :)', 1, 9.81, 1, 1, 0.1, 0.1, 0.5);
-        B = B_lin(filtered_equilibria{i}(j, :)', [1; 0; 0], 1, 1, 0.1);
-        
-        local_control{i}(j) = det(ctrb(A, B)); 
-    end
-    local_control{i}(local_control{i} ~= 0) = true;
-    local_control{i}(local_control{i} == 0) = false;
-end
-
-%% Plot Only Stable and Controllable Equilibria
-f4 = figure;
-f5 = figure;
-f6 = figure;
-
-for i = 1:length(tau_r)
-    figure(f4)
-    hold on
-    for j = 1:size(filtered_equilibria{i}, 1)  
-        if((stability{i}(j) == 1) && local_control{i}(j))
-            plot(tau_r(i), wrapToPi(filtered_equilibria{i}(j, 1)), 'gx')
-        end
-    end
-
-    figure(f5)
-    hold on
-    for j = 1:size(filtered_equilibria{i}, 1)
-        if((stability{i}(j) == 1) && local_control{i}(j))
-            plot(tau_r(i), filtered_equilibria{i}(j, 2), 'gx')
-        end
-    end
-
-    figure(f6)
-    hold on
-    for j = 1:size(filtered_equilibria{i}, 1)
-        if((stability{i}(j) == 1) && local_control{i}(j))
-            plot(tau_r(i), filtered_equilibria{i}(j, 3), 'gx')
-        end
-    end
-end
-
-figure(f4)
-grid on
-title("Equilibria: \theta_r")
-xlabel("\tau")
-ylabel("\theta_r [rad]")
-hold off
-legend("Stable and Controllable")
-
-figure(f5)
-grid on
-title("Equilibria: \theta_0")
-xlabel("\tau")
-ylabel("\theta_0 [rad]")
-hold off
-legend("Stable and Controllable")
-
-figure(f6)
-grid on
-title("Equilibria: \theta_1")
-xlabel("\tau")
-ylabel("\theta_1 [rad]")
-hold off
-legend("Stable and Controllable")
+% for i = 1:length(tau_r)
+%     for j = 1:size(filtered_equilibria{i}, 1)     
+%         A = A_lin(filtered_equilibria{i}(j, :)', 1, 9.81, 1, 1, 0.1, 0.1, 0.5);
+%         B = B_lin(filtered_equilibria{i}(j, :)', [1; 0; 0], 1, 1, 0.1);
+%         
+%         local_control{i}(j) = det(ctrb(A, B)); 
+%     end
+%     local_control{i}(local_control{i} ~= 0) = true;
+%     local_control{i}(local_control{i} == 0) = false;
+% end
+% 
+% %% Plot Only Stable and Controllable Equilibria
+% f4 = figure;
+% f5 = figure;
+% f6 = figure;
+% 
+% for i = 1:length(tau_r)
+%     figure(f4)
+%     hold on
+%     for j = 1:size(filtered_equilibria{i}, 1)  
+%         if((stability{i}(j) == 1) && local_control{i}(j))
+%             plot(tau_r(i), wrapToPi(filtered_equilibria{i}(j, 1)), 'gx')
+%         end
+%     end
+% 
+%     figure(f5)
+%     hold on
+%     for j = 1:size(filtered_equilibria{i}, 1)
+%         if((stability{i}(j) == 1) && local_control{i}(j))
+%             plot(tau_r(i), filtered_equilibria{i}(j, 2), 'gx')
+%         end
+%     end
+% 
+%     figure(f6)
+%     hold on
+%     for j = 1:size(filtered_equilibria{i}, 1)
+%         if((stability{i}(j) == 1) && local_control{i}(j))
+%             plot(tau_r(i), filtered_equilibria{i}(j, 3), 'gx')
+%         end
+%     end
+% end
+% 
+% figure(f4)
+% grid on
+% title("Equilibria: \theta_r")
+% xlabel("\tau")
+% ylabel("\theta_r [rad]")
+% hold off
+% legend("Stable and Controllable")
+% 
+% figure(f5)
+% grid on
+% title("Equilibria: \theta_0")
+% xlabel("\tau")
+% ylabel("\theta_0 [rad]")
+% hold off
+% legend("Stable and Controllable")
+% 
+% figure(f6)
+% grid on
+% title("Equilibria: \theta_1")
+% xlabel("\tau")
+% ylabel("\theta_1 [rad]")
+% hold off
+% legend("Stable and Controllable")
 
 %% Rigid
 % load("equilibria_elastic.mat");

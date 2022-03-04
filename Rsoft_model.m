@@ -142,6 +142,7 @@ x = [x1; x2];
 F = [x2; -inv(B)*(C*x2 + G + K*x1 + D*x2)];
 
 A = jacobian(F, x);
+matlabFunction(A, 'File', 'A_linBF', 'Vars', [theta; m; g; k; L; D; beta; beta_r], 'Outputs', {'A'})
 %% Save Functions
 if(save_function)
     matlabFunction(B, 'File', 'inertiaMatrix', 'Vars', [theta; m; L; D], 'Outputs', {'B'});
