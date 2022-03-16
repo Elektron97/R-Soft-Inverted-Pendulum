@@ -150,6 +150,9 @@ for i = 1:size(THETA0, 1)
         Br12(i, j) = testBr(2, 3);
         Br21(i, j) = testBr(3, 2);
         Br22(i, j) = testBr(3, 3);
+
+        diff = [B11(i, j) B12(i, j); B21(i, j) B22(i, j)] - [santina11(i, j), santina12(i,j); santina21(i, j), santina22(i, j)];
+        norm_diff(i, j) = norm(diff);
         
     end
 end
@@ -265,28 +268,38 @@ view(23, 21);
 
 %%%%%%%%%%%%%%% Condition Number of Inertia Matrix %%%%%%%%%%%%%%%%
 
+% figure
+% subplot(1, 3, 1)
+% s5 = surf(THETA0, THETA1, condB);
+% s5.EdgeColor = 'none';
+% xlabel("\theta_0");
+% ylabel("\theta_1");
+% zlabel("Condition Number of myB");
+% view(23, 21);
+% 
+% subplot(1, 3, 2)
+% s5 = surf(THETA0, THETA1, condSantina);
+% s5.EdgeColor = 'none';
+% xlabel("\theta_0");
+% ylabel("\theta_1");
+% zlabel("Condition Number of Santina B");
+% view(23, 21);
+% 
+% subplot(1, 3, 3)
+% s5 = surf(THETA0, THETA1, condBr);
+% s5.EdgeColor = 'none';
+% xlabel("\theta_0");
+% ylabel("\theta_1");
+% zlabel("Condition Number of myBr");
+% view(23, 21);
+
+%%%%%%%%%%%%%%%% Norm of Difference %%%%%%%%%%%%%%%
 figure
-subplot(1, 3, 1)
-s5 = surf(THETA0, THETA1, condB);
+% C = norm_diff;
+s5 = surf(THETA0, THETA1, norm_diff);
 s5.EdgeColor = 'none';
 xlabel("\theta_0");
 ylabel("\theta_1");
-zlabel("Condition Number of myB");
-view(23, 21);
-
-subplot(1, 3, 2)
-s5 = surf(THETA0, THETA1, condSantina);
-s5.EdgeColor = 'none';
-xlabel("\theta_0");
-ylabel("\theta_1");
-zlabel("Condition Number of Santina B");
-view(23, 21);
-
-subplot(1, 3, 3)
-s5 = surf(THETA0, THETA1, condBr);
-s5.EdgeColor = 'none';
-xlabel("\theta_0");
-ylabel("\theta_1");
-zlabel("Condition Number of myBr");
+zlabel("||myB - santinaB||_2");
 view(23, 21);
 
