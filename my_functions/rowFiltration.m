@@ -1,32 +1,32 @@
 %%%%%%%%%% Filtration %%%%%%%%%
-function [Dn, x_sing] = rowFiltration(Delta, Delta0, x, opt)
+function [On, x_sing] = rowFiltration(Delta, Omega, x, opt)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 m = size(Delta, 2);
-p = size(Delta0, 2);
+p = size(Omega, 1);
 n = length(x);
 
-Deltan = Delta0;
-while rank(Deltan) < n
+Omegan = Omega;
+while rank(Omegan) < n
     
     % Cicle for compute every Lie Bracket of Distributions
     for i = 1:p
         for j = 1:m
-            candidateLieBracket = [Deltan lieBracket(Deltan(:, i), Delta(:, j), x)];
+            candidateLieBracket = [Omegan; rowLieBracket(Omegan(i, :), Delta(:, j), x)];
             
             % Verify that this LieBracket is linear indipendent
-            if(rank(candidateLieBracket) > rank(Deltan))
-                Deltan = candidateLieBracket;
+            if(rank(candidateLieBracket) > rank(Omegan))
+                Omegan = candidateLieBracket;
             end
     
         end
     end
 
-    % Check if dim(Deltak) == dim(Deltak-1)
-    if(p == size(Deltan, 2))
+    % Check if dim(Omegak) == dim(Omegak-1)
+    if(p == size(Omegan, 1))
         break;
     else
-        % Update number of vectors that spans Deltan
-        p = size(Deltan, 2);
+        % Update number of vectors that spans Omegan
+        p = size(Omegan, 1);
     end
 end
 
@@ -35,7 +35,7 @@ if(p < n)
 
 else
     % Check if there is a singular value
-    x_sing = struct2cell(solve(det(Deltan) == 0, x));
+    x_sing = struct2cell(solve(det(Omegan) == 0, x));
     isSing = true;
     
     for i = 1:n
@@ -48,5 +48,5 @@ else
 
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Dn = Deltan;
+On = Omegan;
 end

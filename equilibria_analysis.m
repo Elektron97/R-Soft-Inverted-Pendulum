@@ -195,8 +195,7 @@ for i = 1:length(tau_r)
     for j = 1:size(filtered_equilibria{i}, 1)     
         A = A_lin(filtered_equilibria{i}(j, :)', 1, 9.81, 1, 1, 0.1, 0.1, 0.5);
         C = C_lin(filtered_equilibria{i}(j, 1), filtered_equilibria{i}(j, 2), filtered_equilibria{i}(j, 3), 1);
-        C = [[1 0 0]; C];
-        rankObs = rank(obsv(A, [C, zeros(3, 3)]));
+        rankObs = rank(obsv(A, [C, zeros(2, 3)]));
 
         if(rankObs == 6)
             local_obs{i}(j) = true;  

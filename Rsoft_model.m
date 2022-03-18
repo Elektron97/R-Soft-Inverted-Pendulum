@@ -145,7 +145,7 @@ F = [x2; -inv_B*(C*x2 + G + K*x1 + D*x2)];
 G = [zeros(3, 1); inv_B*S];
 
 %% Linearization
-A = simplify(subs(jacobian(F, x), x2, zeros(3, 1)));
+% A = simplify(subs(jacobian(F, x), x2, zeros(3, 1)));
 
 
 % Linearization of outputs
