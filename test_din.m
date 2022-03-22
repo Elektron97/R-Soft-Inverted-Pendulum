@@ -17,14 +17,14 @@ g = 9.81;
 beta_r = 0.5;
 beta = 0.1;
 k = 1;
-theta_init = [-pi/3; pi/4; -pi/4];
+theta_init = [pi/8; pi/3; -pi/3];
 theta_dot_init = zeros(3, 1);
 
-Kp = 10;
-Kd = 3;
+Kp = 5;
+Kd = 2;
 
-% thetaR_des = pi/4;
-alpha_des = 0;
+thetaR_des = pi/4;
+alpha_des = [1 1 1/2]*theta_init;
 %% Simulation
 load_system('R_soft_sim.slx');
 result=sim('R_soft_sim.slx', 'ReturnWorkspaceOutputs','on'); %simulate and extract results
