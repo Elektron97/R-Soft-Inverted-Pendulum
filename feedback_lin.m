@@ -28,27 +28,31 @@ u = -(Lf2H/LgLfH) + (1/LgLfH)*v;
 
 %% Zero Dynamics
 disp("Zero Dynamics")
-f_zero = simplify(subs([eta3; eta4; subs([zeros(2, 4) eye(2, 2)]*F, x, inv(diffPhi)*new_state)], [csi1; csi2], zeros(2, 1)));
+f_zero = subs([eta3; eta4; subs([zeros(2, 4) eye(2, 2)]*F, x, inv(diffPhi)*new_state)], [csi1; csi2], zeros(2, 1));
+% Subs Parameters
+f_zero = subs(f_zero, [m; g; k; L; D; beta; beta_r], [1; 9.81; 1; 1; 0.1; 0.1; 0.5]);
+% eta3 = eta4 == 0
+f_zero = subs(f_zero, [eta3; eta4], [0; 0]);
 disp("Equilibria")
-equilibria_equation = f_zero == zeros(4, 1);
+equilibria_equation = f_zero(3:end) == zeros(2, 1);
 
-n_try = 100;
+n_try = 10;
 for j = 1:n_try
-    solutions = vpasolve(equilibria_equation, [eta1; eta2; eta3; eta4], 'Random', true);
+    solutions = vpasolve(equilibria_equation, [eta1; eta2], 'Random', true);
     if(isempty(solutions.eta1))
-        equilibria{i}(j, 1) = nan;
-        equilibria{i}(j, 2) = nan;
-        equilibria{i}(j, 3) = nan;
-        equilibria{i}(j, 4) = nan;
+        equilibria(j, 1) = nan;
+        equilibria(j, 2) = nan;
+        equilibria(j, 3) = nan;
+        equilibria(j, 4) = nan;
     else
-        equilibria{i}(j, 1) = double(solutions.eta1);
-        equilibria{i}(j, 2) = double(solutions.eta2);
-        equilibria{i}(j, 3) = double(solutions.eta3);
-        equilibria{i}(j, 4) = double(solutions.eta4);
+        equilibria(j, 1) = double(solutions.eta1);
+        equilibria(j, 2) = double(solutions.eta2);
+        equilibria(j, 3) = double(solutions.eta3);
+        equilibria(j, 4) = double(solutions.eta4);
     end
 end
 
-save("equilibriaZeroAlpha.mat", "equilibria");
+% save("equilibriaZeroAlpha.mat", "equilibria");
 
 %% Cartesian Output
 % % h = [1 1 1/2 0 0 0]*x;

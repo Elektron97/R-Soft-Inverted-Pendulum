@@ -9,7 +9,7 @@ threshold = 1e-5;
 if(abs(theta0) < threshold)
     sinc0 = 1;
     sinc1 = 0;
-    sinc2 = -1/3;
+    sinc2 = -1/12;
 else
     sinc0 = sin(theta0/2)/(theta0/2);
     sinc1 = cos(theta0/2)/theta0 - (2*sin(theta0/2))/(theta0^2);
