@@ -38,6 +38,7 @@ equilibria_equation = f_zero(3:end) == zeros(2, 1);
 
 n_try = 10;
 for j = 1:n_try
+    disp(num2str(j) + "-th try")
     solutions = vpasolve(equilibria_equation, [eta1; eta2], 'Random', true);
     if(isempty(solutions.eta1))
         equilibria(j, 1) = nan;
@@ -52,7 +53,7 @@ for j = 1:n_try
     end
 end
 
-% save("equilibriaZeroAlpha.mat", "equilibria");
+save("equilibriaZeroAlpha.mat", "equilibria");
 
 %% Cartesian Output
 % % h = [1 1 1/2 0 0 0]*x;
