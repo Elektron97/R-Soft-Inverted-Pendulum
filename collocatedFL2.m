@@ -2,13 +2,13 @@
 % Output: alpha1
 function tau_r = collocatedFL2(state, state_dot, Kd, m, g, k, L, D, beta_r, beta, Kp, alpha_des)
     
-%     thresh = 1e-3;
-%     %No Identically Zero
-%     for i = 1:length(state)
-%        if(abs(state(i)) < thresh)
-%            state(i) = thresh;
-%        end
-%     end
+    thresh = 1e-3;
+    %No Identically Zero
+    for i = 1:length(state)
+       if(abs(state(i)) < thresh)
+           state(i) = thresh;
+       end
+    end
 
     %% Compute Dynamic Matrices
     B = inertiaMatrix(state(1), state(2), state(3), m, L, D);
@@ -51,6 +51,6 @@ function tau_r = collocatedFL2(state, state_dot, Kd, m, g, k, L, D, beta_r, beta
 
     %% Final Torque
     % Numerical Issues
-%     tau_r = Brr_tilde*v + Brr_tilde*([1 1 1/2]*(B\(h + G)));
-    tau_r = Brr_tilde*v + (hr + Gr) - Bro*inv_Boo*(ho + Go) + Brr_tilde*([1 1/2]*(invBor*(hr + Gr) + invBoo*(ho + Go)));
+%     tau_r = pinv(invBrr + [1 1/2]*invBor)*(v + [1 1 1/2]*(B\(h+G)));
+    tau_r = pinv(invBrr + [1 1/2]*invBor)*(v + [1 1 1/2]*(pinv(B)*(h+G)));
 end

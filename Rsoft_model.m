@@ -151,11 +151,11 @@ G = [zeros(3, 1); inv_B*S];
 % Linearization of outputs
 % dh = simplify(subs(J_sd, [s; d], [1; 0]));
 %% Reachability
-% % accs_distribution = filtration([F, G], G, x)
-% LfG = lieBracket(F, G, x);
-% L2fG = lieBracket(F, LfG, x);
-% LgLfG = lieBracket(G, LfG, x);
-% L3fG = lieBracket(F, L2fG, x);
+% accs_distribution = filtration([F, G], G, x)
+LfG = lieBracket(F, G, x);
+L2fG = lieBracket(F, LfG, x);
+LgLfG = lieBracket(G, LfG, x);
+L3fG = lieBracket(F, L2fG, x);
 
 %% Save Functions
 if(save_function)
