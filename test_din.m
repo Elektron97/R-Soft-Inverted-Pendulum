@@ -9,8 +9,8 @@ addpath("Della Santina");
 addpath("origin_soft_pendulum");
 %% Parameters
 L = 1;
-% D = 0.1;
-D = 0;
+D = 0.1;
+% D = 0;
 
 m = 1;
 g = 9.81;
@@ -20,14 +20,14 @@ k = 1;
 theta_init = [0; pi/4; -pi/4];
 theta_dot_init = zeros(3, 1);
 
-% Kp = 5;
-% Kd = 2;
-% 
+Kp = 0.5;
+Kd = 0.2;
+
 % thetaR_des = pi/4;
-% alpha_des = [1 1 1/2]*theta_init;
+alpha_des = 0;
 
 %% Adaptive initial Parameters
-pi_real = [m*L^2; m*g*L; k; beta];
+% pi_real = [m*L^2; m*g*L; k; beta];
 % pi_init = [0.8; 9.7; 0.91; 0.15];
 pi_init = zeros(4, 1);
 %% Simulation
