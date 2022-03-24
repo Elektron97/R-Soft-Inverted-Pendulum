@@ -33,27 +33,27 @@ pi_init = zeros(4, 1);
 %% Simulation
 % load_system('R_soft_sim.slx');
 % result=sim('R_soft_sim.slx', 'ReturnWorkspaceOutputs','on'); %simulate and extract results
-
-load_system('R_soft_sim2020b.slx');
-result=sim('R_soft_sim2020b.slx', 'ReturnWorkspaceOutputs','on'); %simulate and extract results
+% 
+% % load_system('R_soft_sim2020b.slx');
+% % result=sim('R_soft_sim2020b.slx', 'ReturnWorkspaceOutputs','on'); %simulate and extract results
 
 %% Plot and Animation
-figure
-subplot(2, 1, 1)
-plot(result.simout.time, result.simout.data)
-grid on
-% legend("\theta_0", "\theta_1");
-legend("\theta_r","\theta_0", "\theta_1");
-xlabel("Time [s]");
-ylabel("\theta [rad]");
-
-subplot(2, 1, 2)
-plot(result.simout1.time, result.simout1.data)
-grid on
-xlabel("Time [s]");
-ylabel("\tau [N m]");
-title("Actuation");
-
+% % figure
+% % subplot(2, 1, 1)
+% % plot(result.simout.time, result.simout.data)
+% % grid on
+% % % legend("\theta_0", "\theta_1");
+% % legend("\theta_r","\theta_0", "\theta_1");
+% % xlabel("Time [s]");
+% % ylabel("\theta [rad]");
+% % 
+% % subplot(2, 1, 2)
+% % plot(result.simout1.time, result.simout1.data)
+% % grid on
+% % xlabel("Time [s]");
+% % ylabel("\tau [N m]");
+% % title("Actuation");
+% 
 % v = VideoWriter("RSoft_Pendulum_alpha");
 % open(v);
 % 
