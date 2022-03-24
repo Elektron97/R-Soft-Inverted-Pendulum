@@ -33,9 +33,9 @@ f_zero = subs([eta3; eta4; subs([zeros(2, 4) eye(2, 2)]*F, x, inv(diffPhi)*new_s
 f_zero = subs(f_zero, [m; g; k; L; D; beta; beta_r], [1; 9.81; 1; 1; 0.1; 0.1; 0.5]);
 % eta3 = eta4 == 0
 f_zero = subs(f_zero, [eta3; eta4], [0; 0]);
-disp("Equilibria")
-equilibria_equation = f_zero(3:end) == zeros(2, 1);
 
+equilibria_equation = simplify(f_zero(3:end)) == zeros(2, 1);
+disp("Equilibria");
 n_try = 10;
 for j = 1:n_try
     disp(num2str(j) + "-th try")
