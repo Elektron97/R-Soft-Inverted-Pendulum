@@ -6,7 +6,7 @@ clc
 %% Add Functions
 addpath("my_functions");
 
-save_functions = true;
+save_functions = false;
 %% Declare Symbolic Variables
 syms theta0 theta1 real
 syms theta0_dot theta1_dot real
@@ -17,8 +17,7 @@ theta = [theta0; theta1];
 theta_dot = [theta0_dot; theta1_dot];
 
 syms m k g beta real
-
-phi = 0;
+syms phi real
 %% Affine Curvature
 curv = theta0 + theta1*s;
 
@@ -88,8 +87,8 @@ potential = simplify(G + K*theta);
 % 
 % for i = 1:n_try
 %     solutions = vpasolve(equilibria_equation, theta, 'Random', true);
-%     equilibria(i, 1) = wrapToPi(double(solutions.theta0));
-%     equilibria(i, 2) = wrapToPi(double(solutions.theta1));
+%     equilibria(i, 1) = double(solutions.theta0);
+%     equilibria(i, 2) = double(solutions.theta1);
 % end
 
 % Stiffness Matrix for Stability
@@ -99,7 +98,7 @@ for i = 1:length(potential)
     end
 end
 
-Stiff_Mat_origin = eval(eval(subs(Stiff_Mat, theta, (1e-5)*ones(length(theta), 1))));
+% matlabFunction(Stiff_Mat, 'File', 'originStiffMat', 'Vars', [theta; m; g; k; L; D; phi], 'Outputs', {'StiffMat'})
 
 %% Save Functions
 if(save_functions)

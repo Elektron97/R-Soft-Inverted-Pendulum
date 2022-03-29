@@ -14,6 +14,10 @@ LfH = jacobian(h, x)*F;
 LgH = jacobian(h, x)*G;
 Lf2H = jacobian(LfH, x)*F;
 LgLfH = jacobian(LfH, x)*G;
+disp("Secondo ordine calcolato");
+
+% Lf3H = jacobian(Lf2H, x)*F;
+% Lg2LfH = jacobian(Lf2H, x)*G;
 
 Phi = [1 1 1/2 0 0 0; 0 0 0 1 1 1/2; 0 1 0 0 0 0; 0 0 1 0 0 0; 0 0 0 0 1 0; 0 0 0 0 0 1]*x;
 diffPhi = jacobian(Phi, x);
@@ -25,6 +29,9 @@ new_state = [csi1; csi2; eta1; eta2; eta3; eta4];
 
 syms v real
 u = -(Lf2H/LgLfH) + (1/LgLfH)*v;
+% u = -(Lf3H/Lg2LfH) + (1/Lg2LfH)*v;
+
+% matlabFunction(u, 'File', 'alpha3rd', 'Vars', [theta; theta_dot; m; g; k; L; D; beta_r; beta; v], 'Outputs', {'alphaFL'}, 'Optimize', false)
 
 %% Zero Dynamics
 disp("Zero Dynamics")
