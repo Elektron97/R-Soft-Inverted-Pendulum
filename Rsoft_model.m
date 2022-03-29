@@ -97,6 +97,7 @@ disp("Matrice di Coriolis Calcolata!");
 %% Equilibria
 potential = simplify(G + K*theta);
 
+% % To compute equilibria with numerical solutions
 % step_tau = 0.5;
 % 
 % tau_r = -10:step_tau:10;
@@ -133,7 +134,7 @@ end
 % matlabFunction(Stiff_Mat, 'File', 'stiffMatrix', 'Vars', [theta; m; g; k; L; D], 'Outputs', {'St_Mat'});
 disp("Stiffness Matrix computed");
 
-%% Linearized
+%% State Space
 x1 = theta;
 x2 = theta_dot;
 
@@ -147,16 +148,8 @@ G = [zeros(3, 1); inv_B*S];
 %% Linearization
 % A = simplify(subs(jacobian(F, x), x2, zeros(3, 1)));
 
-
 % Linearization of outputs
 % dh = simplify(subs(J_sd, [s; d], [1; 0]));
-%% Reachability
-% accs_distribution = filtration([F, G], G, x)
-% LfG = lieBracket(F, G, x);
-% L2fG = lieBracket(F, LfG, x);
-% LgLfG = lieBracket(G, LfG, x);
-% L3fG = lieBracket(F, L2fG, x);
-
 %% Save Functions
 if(save_function)
     matlabFunction(B, 'File', 'inertiaMatrix', 'Vars', [theta; m; L; D], 'Outputs', {'B'});
@@ -166,6 +159,7 @@ if(save_function)
     matlabFunction(C, 'File', 'coriolisMatrix', 'Vars', [theta; theta_dot; m; L; D], 'Outputs', {'C'});
     matlabFunction(Stiff_Mat, 'File', 'stiffMatrix', 'Vars', [theta; m; g; k; L; D], 'Outputs', {'St_Mat'});
     
+% % Doesn't work, thanks matlab
 %     matlabFunction(B, 'File', 'uniformInertiaMatrix', 'Vars', [theta; m; L; D], 'Outputs', {'B'});
 %     matlabFunction(G, 'File', 'uniformGravityVector', 'Vars', [theta; m; g; L; D], 'Outputs', {'G'});
 %     matlabFunction(K, 'File', 'uniformElasticMatrix', 'Vars', k, 'Outputs', {'K'});

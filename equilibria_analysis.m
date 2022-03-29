@@ -144,7 +144,7 @@ for i = 1:length(tau_r)
     figure(f4)
     hold on
     for j = 1:size(filtered_equilibria{i}, 1)  
-        if((stability{i}(j) == 1) && local_control{i}(j))
+        if(local_control{i}(j))
             plot(tau_r(i), wrapToPi(filtered_equilibria{i}(j, 1)), 'gx')
         end
     end
@@ -152,7 +152,7 @@ for i = 1:length(tau_r)
     figure(f5)
     hold on
     for j = 1:size(filtered_equilibria{i}, 1)
-        if((stability{i}(j) == 1) && local_control{i}(j))
+        if(local_control{i}(j))
             plot(tau_r(i), filtered_equilibria{i}(j, 2), 'gx')
         end
     end
@@ -160,7 +160,7 @@ for i = 1:length(tau_r)
     figure(f6)
     hold on
     for j = 1:size(filtered_equilibria{i}, 1)
-        if((stability{i}(j) == 1) && local_control{i}(j))
+        if(local_control{i}(j))
             plot(tau_r(i), filtered_equilibria{i}(j, 3), 'gx')
         end
     end
@@ -172,7 +172,7 @@ title("Equilibria: \theta_r")
 xlabel("\tau")
 ylabel("\theta_r [rad]")
 hold off
-legend("Stable and Controllable")
+legend("Controllable")
 
 figure(f5)
 grid on
@@ -180,7 +180,7 @@ title("Equilibria: \theta_0")
 xlabel("\tau")
 ylabel("\theta_0 [rad]")
 hold off
-legend("Stable and Controllable")
+legend("Controllable")
 
 figure(f6)
 grid on
@@ -188,7 +188,7 @@ title("Equilibria: \theta_1")
 xlabel("\tau")
 ylabel("\theta_1 [rad]")
 hold off
-legend("Stable and Controllable")
+legend("Controllable")
 
 %% Observability
 for i = 1:length(tau_r)
@@ -196,7 +196,7 @@ for i = 1:length(tau_r)
         A = A_lin(filtered_equilibria{i}(j, :)', 1, 9.81, 1, 1, 0.1, 0.1, 0.5);
         C = C_lin(filtered_equilibria{i}(j, 1), filtered_equilibria{i}(j, 2), filtered_equilibria{i}(j, 3), 1);
         rankObs = rank(obsv(A, [C, zeros(2, 3)]));
-
+%         rankObs = rank(eye(6, 6));
         if(rankObs == 6)
             local_obs{i}(j) = true;  
         else
