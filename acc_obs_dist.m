@@ -36,8 +36,10 @@ disp("Second order computed");
 % Third Order
 Lf3dh = rowLieBracket(Lf2dh, F, x);
 Lg2Lfdh = rowLieBracket(LgLfdh, G, x);
+disp("Third Order computed");
 
 obs_codistr = [dh; Lfdh; Lf2dh; LgLfdh; Lf3dh; Lg2Lfdh];
+disp("Save codistribution");
 save('obs_codistr.mat', 'obs_codistr');
 
 % % Possible outputs

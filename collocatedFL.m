@@ -1,4 +1,4 @@
-function tau_r = collocatedFL(state, state_dot, Kd, m, g, k, L, D, beta_r, beta, Kp, thetaR_des)
+function tau_r = collocatedFL(state, state_dot, Kd, m, g, k, L, D, beta_r, beta, Kp, thetaR_des, thetaR_dot_des, thetaR_2dot_des)
     
     %% Compute Dynamic Matrices
     B = inertiaMatrix(state(1), state(2), state(3), m, L, D);
@@ -31,7 +31,7 @@ function tau_r = collocatedFL(state, state_dot, Kd, m, g, k, L, D, beta_r, beta,
     Gr_tilde = Gr - Bro*inv_Boo*Go;
 
     %% PD law
-    v = -Kd*state_dot(1) + Kp*(thetaR_des - state(1));
+    v = thetaR_2dot_des + Kd*(thetaR_dot_des - state_dot(1)) + Kp*(thetaR_des - state(1));
 
     %% Final Torque
     tau_r = Brr_tilde*v + hr_tilde + Gr_tilde;
