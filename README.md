@@ -43,6 +43,8 @@ Gli equilibri sono ricavati dai file `.mat` generati dallo script `Roft_model.m`
 - Gli scripts `validazione_coriolis.m` e `validazione_dinamica.m` confrontano i valori delle matrici dinamiche
 calcolate dagli scripts precedenti, particolarizzandole per un set di valori delle variabili di stato soddisfacente.
 
+- Una simulazione puramente cinematica è implementata dallo script `test_kin.m`.
+
 ## 4) Proprietà Strutturali
 Per un controllo più approfondito delle proprietà strutturali del sistema, si effettua un calcolo iterativo
 della distribuzione di accessibilità e della codistribuzione di osservabilità. Le distribuzioni sono calcolate nello script `acc_obs_dist.m`. 
@@ -62,11 +64,13 @@ Il controllo adattivo è implementato dalla funzione `regressorSoftInverted.m`. 
 
 ## 7) Simulazioni
 Il file simulink `R_soft_sim.slx` contiene diverse simulazioni.
-- *Collocated Feedback Linearization Spong Like*: Controllo sulla variabile di giunto alla base. 
+- **Collocated Feedback Linearization Spong Like**: Controllo sulla variabile di giunto alla base. 
 
-- Feedback Linearization Alpha: Controllo sull'inclinazione della tip rispetto al sistema di riferimento fisso.
+- **Feedback Linearization Alpha**: Controllo sull'inclinazione della tip rispetto al sistema di riferimento fisso.
 
-- Autonomous Soft Inverted Pendulum: Sistema Soft Inverted Pendulum Autonomo o con ingressi lentamente variabili.
+- **Autonomous Soft Inverted Pendulum**: Sistema Soft Inverted Pendulum Autonomo o con ingressi lentamente variabili.
 
-- Adaptive Controller Soft Inverted Pendulum: Controllo adattivo del sistema Soft Inverted Pendulum. I risultati sono del tutto paragonabili con quelli
+- **Adaptive Controller Soft Inverted Pendulum**: Controllo adattivo del sistema Soft Inverted Pendulum. I risultati sono del tutto paragonabili con quelli
 dell'[articolo](https://ieeexplore.ieee.org/abstract/document/9482817). 
+
+Lo script `test_din.m` non fa altro che dichiarare i parametri della simulazione e registrarne i valori di simulazione. E' stata poi implementata la funzione `plot_Rosft.m` che visualizza il sistema e la traiettoria. 

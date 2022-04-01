@@ -71,10 +71,6 @@ rho = 2*m*dirac(s-1);
 B =simplify( int( int(rho*(J_sd')*J_sd, d, [-0.5 0.5]), s, [0 1]) );
 disp("Matrice di Inerzia Calcolata!");
 
-% deriv_inv_inertia;
-% diffB_term = deriv_inv_B*[eye(3, 3); zeros(3, 3); zeros(3, 3)];
-% 
-% matlabFunction(diffB_term, 'File', 'diffB_term', 'Vars', [theta; m; L; D], 'Outputs', {'diffB_term'});
 %% Gravity Vector
 gravity_field = int( int(rho*g*(sin(phi)*p_sd(1) + cos(phi)*p_sd(2)), d, [-0.5 0.5]), s, [0 1]);
 
