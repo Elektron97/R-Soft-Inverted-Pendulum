@@ -7,7 +7,7 @@ clc
 addpath("my_functions");
 
 %% Load Equilibria
-k = 4;
+k = 1;
 
 if k == 1
     load("equilibria_phi1.mat");    

@@ -22,14 +22,14 @@ addpath("my_functions");
 % 
 %  filtration([f g], g, x)
 
-syms x y theta real
-
-f = [];
-g = [cos(theta) 0; sin(theta) 0; 0 1];
-dh = [x y 0];
-
-filtration([f g], g, [x y theta]')
-rowFiltration([f g], dh, [x y theta]')
+% syms x y theta real
+% 
+% f = [];
+% g = [cos(theta) 0; sin(theta) 0; 0 1];
+% dh = [x y 0];
+% 
+% filtration([f g], g, [x y theta]')
+% rowFiltration([f g], dh, [x y theta]')
 
 % syms x1 x2 x3 real
 % x = [x1 x2 x3];
@@ -52,5 +52,14 @@ rowFiltration([f g], dh, [x y theta]')
 % 
 % % filtration([f g], g, [x y theta]')
 % rowFiltration([f g], dh, [x y theta]')
+
+syms x y phi x_dot y_dot phi_dot m g L J real
+
+f = [x_dot; y_dot; phi_dot; 0; -g; 0];
+g1 = [0; 0; 0; -sin(phi)/m; cos(phi)/m; -L/J];
+g2 = [g1(1:end-1); -g1(end)];
+g = [g1 g2];
+
+filtration([f g], g, [x y phi x_dot y_dot phi_dot]')
 
 

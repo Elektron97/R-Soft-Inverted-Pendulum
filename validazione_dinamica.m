@@ -18,6 +18,10 @@ k = 1;
 
 threshold = 1e-3;
 
+% Computational Cost of Dynamics Matrices
+tic
+inertiaMatrix(pi/4, pi/4, -pi/4, m, L, D);
+toc
 %% Validation Gravity Vector
 % [THETA0, THETA1] = meshgrid(-10:0.1:10, -10:0.1:10);
 % THETAR = 0*THETA0;
@@ -160,111 +164,111 @@ end
 %% Plot
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% my B
-figure
-subplot(2, 2, 1)
-s1 = surf(THETA0, THETA1, real(B11));
-s1.EdgeColor = 'none';
-xlabel("\theta_0");
-ylabel("\theta_1");
-zlabel("myB_{11}");
-view(23, 21);
-
-subplot(2, 2, 2)
-s2 = surf(THETA0, THETA1, real(B12));
-s2.EdgeColor = 'none';
-xlabel("\theta_0");
-ylabel("\theta_1");
-zlabel("myB_{12}");
-view(23, 21);
-
-subplot(2, 2, 3)
-s3 = surf(THETA0, THETA1, real(B21));
-s3.EdgeColor = 'none';
-xlabel("\theta_0");
-ylabel("\theta_1");
-zlabel("myB_{21}");
-view(23, 21);
-
-subplot(2, 2, 4)
-s4 = surf(THETA0, THETA1, real(B22));
-s4.EdgeColor = 'none';
-xlabel("\theta_0");
-ylabel("\theta_1");
-zlabel("myB_{22}");
-view(23, 21);
+% % my B
+% figure
+% subplot(2, 2, 1)
+% s1 = surf(THETA0, THETA1, real(B11));
+% s1.EdgeColor = 'none';
+% xlabel("\theta_0");
+% ylabel("\theta_1");
+% zlabel("myB_{11}");
+% view(23, 21);
+% 
+% subplot(2, 2, 2)
+% s2 = surf(THETA0, THETA1, real(B12));
+% s2.EdgeColor = 'none';
+% xlabel("\theta_0");
+% ylabel("\theta_1");
+% zlabel("myB_{12}");
+% view(23, 21);
+% 
+% subplot(2, 2, 3)
+% s3 = surf(THETA0, THETA1, real(B21));
+% s3.EdgeColor = 'none';
+% xlabel("\theta_0");
+% ylabel("\theta_1");
+% zlabel("myB_{21}");
+% view(23, 21);
+% 
+% subplot(2, 2, 4)
+% s4 = surf(THETA0, THETA1, real(B22));
+% s4.EdgeColor = 'none';
+% xlabel("\theta_0");
+% ylabel("\theta_1");
+% zlabel("myB_{22}");
+% view(23, 21);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Santina B
-figure
-subplot(2, 2, 1)
-s1 = surf(THETA0, THETA1, real(santina11));
-s1.EdgeColor = 'none';
-xlabel("\theta_0");
-ylabel("\theta_1");
-zlabel("Santina B_{11}");
-view(23, 21);
-
-subplot(2, 2, 2)
-s2 = surf(THETA0, THETA1, real(santina12));
-s2.EdgeColor = 'none';
-xlabel("\theta_0");
-ylabel("\theta_1");
-zlabel("Santina B_{12}");
-view(23, 21);
-
-subplot(2, 2, 3)
-s3 = surf(THETA0, THETA1, real(santina21));
-s3.EdgeColor = 'none';
-xlabel("\theta_0");
-ylabel("\theta_1");
-zlabel("Santina B_{21}");
-view(23, 21);
-
-subplot(2, 2, 4)
-s4 = surf(THETA0, THETA1, real(santina22));
-s4.EdgeColor = 'none';
-xlabel("\theta_0");
-ylabel("\theta_1");
-zlabel("Santina B_{22}");
-view(23, 21);
+% % Santina B
+% figure
+% subplot(2, 2, 1)
+% s1 = surf(THETA0, THETA1, real(santina11));
+% s1.EdgeColor = 'none';
+% xlabel("\theta_0");
+% ylabel("\theta_1");
+% zlabel("Santina B_{11}");
+% view(23, 21);
+% 
+% subplot(2, 2, 2)
+% s2 = surf(THETA0, THETA1, real(santina12));
+% s2.EdgeColor = 'none';
+% xlabel("\theta_0");
+% ylabel("\theta_1");
+% zlabel("Santina B_{12}");
+% view(23, 21);
+% 
+% subplot(2, 2, 3)
+% s3 = surf(THETA0, THETA1, real(santina21));
+% s3.EdgeColor = 'none';
+% xlabel("\theta_0");
+% ylabel("\theta_1");
+% zlabel("Santina B_{21}");
+% view(23, 21);
+% 
+% subplot(2, 2, 4)
+% s4 = surf(THETA0, THETA1, real(santina22));
+% s4.EdgeColor = 'none';
+% xlabel("\theta_0");
+% ylabel("\theta_1");
+% zlabel("Santina B_{22}");
+% view(23, 21);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% my Br
-figure
-subplot(2, 2, 1)
-s1 = surf(THETA0, THETA1, real(Br11));
-s1.EdgeColor = 'none';
-xlabel("\theta_0");
-ylabel("\theta_1");
-zlabel("myBr_{22}");
-view(23, 21);
-
-subplot(2, 2, 2)
-s2 = surf(THETA0, THETA1, real(Br12));
-s2.EdgeColor = 'none';
-xlabel("\theta_0");
-ylabel("\theta_1");
-zlabel("myBr_{23}");
-view(23, 21);
-
-subplot(2, 2, 3)
-s3 = surf(THETA0, THETA1, real(Br21));
-s3.EdgeColor = 'none';
-xlabel("\theta_0");
-ylabel("\theta_1");
-zlabel("myBr_{32}");
-view(23, 21);
-
-subplot(2, 2, 4)
-s4 = surf(THETA0, THETA1, real(Br22));
-s4.EdgeColor = 'none';
-xlabel("\theta_0");
-ylabel("\theta_1");
-zlabel("myBr_{33}");
-view(23, 21);
+% 
+% % my Br
+% figure
+% subplot(2, 2, 1)
+% s1 = surf(THETA0, THETA1, real(Br11));
+% s1.EdgeColor = 'none';
+% xlabel("\theta_0");
+% ylabel("\theta_1");
+% zlabel("myBr_{22}");
+% view(23, 21);
+% 
+% subplot(2, 2, 2)
+% s2 = surf(THETA0, THETA1, real(Br12));
+% s2.EdgeColor = 'none';
+% xlabel("\theta_0");
+% ylabel("\theta_1");
+% zlabel("myBr_{23}");
+% view(23, 21);
+% 
+% subplot(2, 2, 3)
+% s3 = surf(THETA0, THETA1, real(Br21));
+% s3.EdgeColor = 'none';
+% xlabel("\theta_0");
+% ylabel("\theta_1");
+% zlabel("myBr_{32}");
+% view(23, 21);
+% 
+% subplot(2, 2, 4)
+% s4 = surf(THETA0, THETA1, real(Br22));
+% s4.EdgeColor = 'none';
+% xlabel("\theta_0");
+% ylabel("\theta_1");
+% zlabel("myBr_{33}");
+% view(23, 21);
 
 %%%%%%%%%%%%%%% Condition Number of Inertia Matrix %%%%%%%%%%%%%%%%
 
@@ -293,13 +297,22 @@ view(23, 21);
 % zlabel("Condition Number of myBr");
 % view(23, 21);
 
-%%%%%%%%%%%%%%%% Norm of Difference %%%%%%%%%%%%%%%
-figure
-% C = norm_diff;
-s5 = surf(THETA0, THETA1, norm_diff);
+s5 = surf(THETA0, THETA1, condBr);
 s5.EdgeColor = 'none';
 xlabel("\theta_0");
 ylabel("\theta_1");
-zlabel("||myB - santinaB||_2");
+zlabel("Condition Number of myBr");
 view(23, 21);
+% zlim([0, 1e+6]);
+colorbar
+
+%%%%%%%%%%%%%%%% Norm of Difference %%%%%%%%%%%%%%%
+% figure
+% % C = norm_diff;
+% s5 = surf(THETA0, THETA1, norm_diff);
+% s5.EdgeColor = 'none';
+% xlabel("\theta_0");
+% ylabel("\theta_1");
+% zlabel("||myB - santinaB||_2");
+% view(23, 21);
 

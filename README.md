@@ -1,5 +1,5 @@
 # R-Soft-Inverted-Pendulum
-Modellazione e controllo del sistema Soft Inverted Pendulum con un giunto rotoidale alla base.
+Modellazione e controllo del sistema Soft Inverted Pendulum con un giunto rotoidale attuato alla base.
 
 ## Contenuti:
 * [1. Requisiti](#1-requisiti)
@@ -12,11 +12,11 @@ Modellazione e controllo del sistema Soft Inverted Pendulum con un giunto rotoid
 
 ## 1) Requisiti
 Per eseguire gli scripts, è necessario scaricare il Robotics Toolbox di Peter Corke, reperibile
-al seguente [link](https://petercorke.com/toolboxes/robotics-toolbox/). Inoltre, per eseguire i file
-simulink, è necessario avere una versione superiore al R2021b.
+al seguente [link](https://petercorke.com/toolboxes/robotics-toolbox/). Inoltre, per eseguire i files
+simulink, è necessario avere una versione di MATLAB R2021b.
 
 ## 2) Guida al Codice
-Il pkg è organizzato con 3 directory, in cui sono depositate le funzioni utili per l'analisi e il controllo
+Il pkg è organizzato con 3 directory, in cui sono raccolte le funzioni utili per l'analisi e il controllo
 del modello. Di seguito una descrizione di queste 3:
 
 - `Della Santina`: Directory contenente le funzioni fornite alla consegna del progetto. Queste funzioni servono per 
@@ -34,14 +34,14 @@ Il resto degli scripts e delle funzioni sono descritte nelle sezioni successive.
 gli elementi dinamici di interesse, genera delle funzioni utili per le simulazioni. 
 
 - La modellazione del sistema R-Soft Inverted Pendulum è invece implementata dallo script `Rsoft_model.m`. Analogamente allo script
-precedente, esso implementa il calcolo degli elementi dinamici di interesse e genera delle funzioni utili per l'implementazione in simulazione.
+precedente, esso implementa il calcolo degli elementi dinamici di interesse e genera delle funzioni utili per le simulazioni.
 Inoltre, lo script effettua una linearizzazione del sistema.
 
 - L'analisi degli equilibri è svolta dalo script `equilibria_analysis.m`, il quale analizza la stabilità, la raggiungibilità e l'osservabilità del sistema linearizzato.
-Gli equilibri sono ricavati dai file `.mat` generati dallo script `Roft_model.m`.
+Gli equilibri sono ricavati dai file `.mat`, generati dallo script `Roft_model.m`.
 
 - Gli scripts `validazione_coriolis.m` e `validazione_dinamica.m` confrontano i valori delle matrici dinamiche
-calcolate dagli scripts precedenti, particolarizzandole per un set di valori delle variabili di stato soddisfacente.
+generate dagli scripts precedenti, particolarizzandole per un set di valori delle variabili di stato.
 
 - Una simulazione puramente cinematica è implementata dallo script `test_kin.m`.
 
@@ -55,8 +55,8 @@ Inoltre, sono state implementate diverse funzioni utili:
 - `rowFiltration.m`: Essa implementa il calcolo iterativo della filtrazione per la codistribuzione di osservabilità.
 
 ## 5) Controllo
-Per il controllo, è stato implementato lo script `feedback_lin.m` che calcola gli ingressi e il nuovo stato, impostata l'output da controllare.
-Inoltre, sono state scritte le funzioni `collocatedFL.m` e `collocatedFL2.m` che implementano rispettivamente la lin. in feedback su \theta_r e \alpha_{s}.
+Per il controllo, è stato implementato lo script `feedback_lin.m` che calcola gli ingressi e il nuovo stato, impostato l'output da controllare.
+Inoltre, sono state scritte le funzioni `collocatedFL.m` e `collocatedFL2.m` che implementano rispettivamente la lin. in feedback su θ<sub>r</sub> e α<sub>s</sub>.
 L'implementazione del controllore sarà poi presente nel file simulink `R_soft_sim.slx`, il quale ha una sezione apposita.
 
 ## 6) Controllo Adattivo
