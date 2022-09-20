@@ -42,28 +42,20 @@ xlabel("Time [s]");
 ylabel("\theta [rad]");
 
 % % Add desired trajectory
-theta_rd = atan(result.simout.time - 15);
-
-% % Step
-% for i = 1:length(result.simout.time)
-%     if(result.simout.time(i) <= 15)
-%         theta_rd(i) = -pi/2;
-%     else
-%         theta_rd(i) = pi/2;
-%     end
-% end
 
 hold on
-plot(result.simout.time, theta_rd);
+plot(result.simout2.time, result.simout2.data);
 hold off
 legend("\theta_r","\theta_0", "\theta_1", "\theta_{rd}");
+title("Controlled R-SIP: Step traj.");
+ylim([-15, 15])
 
-figure
-plot(result.simout1.time, result.simout1.data)
-grid on
-xlabel("Time [s]");
-ylabel("\tau [N m]");
-title("Actuation");
+% figure
+% plot(result.simout1.time, result.simout1.data)
+% grid on
+% xlabel("Time [s]");
+% ylabel("\tau [N m]");
+% title("Actuation");
 
 %% Rec Video
 % v = VideoWriter("RSoft_Pendulum_step");
