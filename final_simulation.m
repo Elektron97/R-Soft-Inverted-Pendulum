@@ -65,6 +65,20 @@ zlabel("\theta_r")
 % ylabel("\tau [N m]");
 % title("Actuation");
 
+%% Add equilibria in phase space
+zero_equilibria
+for i = 1:length(phi)
+    hold on
+    for j = 1:size(filtered_equilibria{i}, 1)     
+        if(stability{i}(j))
+            plot(phi(i), filtered_equilibria{i}(j, 1), 'bx')
+        else
+            plot(phi(i), filtered_equilibria{i}(j, 1), 'rx')
+        end 
+        
+    end
+end
+
 %% Rec Video
 % v = VideoWriter("RSoft_Pendulum_step");
 % open(v);
