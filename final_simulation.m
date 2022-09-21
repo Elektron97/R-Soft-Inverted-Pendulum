@@ -50,6 +50,14 @@ legend("\theta_r","\theta_0", "\theta_1", "\theta_{rd}");
 title("Controlled R-SIP: Step traj.");
 ylim([-15, 15])
 
+figure
+plot3(result.simout.data(:, 2), result.simout.data(:, 3), result.simout.data(:, 1))
+title("Spazio delle fasi")
+grid on
+xlabel("\theta_0")
+ylabel("\theta_1")
+zlabel("\theta_r")
+
 % figure
 % plot(result.simout1.time, result.simout1.data)
 % grid on
