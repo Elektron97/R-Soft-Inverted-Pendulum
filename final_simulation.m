@@ -58,26 +58,19 @@ xlabel("\theta_0")
 ylabel("\theta_1")
 zlabel("\theta_r")
 
+% % Add quiver3
+% hold on
+% quiver3(result.simout.data(:, 2), result.simout.data(:, 3), result.simout.data(:, 1), ...
+%         result.simout3.data(:, 2), result.simout3.data(:, 3), result.simout3.data(:, 1))
+% hold off
+axis equal
+
 % figure
 % plot(result.simout1.time, result.simout1.data)
 % grid on
 % xlabel("Time [s]");
 % ylabel("\tau [N m]");
 % title("Actuation");
-
-%% Add equilibria in phase space
-zero_equilibria
-for i = 1:length(phi)
-    hold on
-    for j = 1:size(filtered_equilibria{i}, 1)     
-        if(stability{i}(j))
-            plot(phi(i), filtered_equilibria{i}(j, 1), 'bx')
-        else
-            plot(phi(i), filtered_equilibria{i}(j, 1), 'rx')
-        end 
-        
-    end
-end
 
 %% Rec Video
 % v = VideoWriter("RSoft_Pendulum_step");

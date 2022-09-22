@@ -1,7 +1,7 @@
 %%%%%%%%%% Zero Dynamics Equilibria Analysis %%%%%%%%%%
-% clear all
-% close all
-% clc
+clear all
+close all
+clc
 
 %% AddPath functions
 addpath("my_functions");
@@ -56,50 +56,50 @@ for i = 1:length(phi)
 end
 
 %% Plot Equilibria
-% f1 = figure;
-% f2 = figure;
-% 
-% for i = 1:length(phi)
-%     figure(f1)
-%     hold on
-%     for j = 1:size(filtered_equilibria{i}, 1)
-%         
-%         if(stability{i}(j))
-%             plot(phi(i), filtered_equilibria{i}(j, 1), 'bx')
-%         else
-%             plot(phi(i), filtered_equilibria{i}(j, 1), 'rx')
-%         end 
-%         
-%     end
-% 
-%     figure(f2)
-%     hold on
-%     for j = 1:size(filtered_equilibria{i}, 1)
-%         
-%         if(stability{i}(j))
-%             plot(phi(i), filtered_equilibria{i}(j, 2), 'bx')
-%         else
-%             plot(phi(i), filtered_equilibria{i}(j, 2), 'rx')
-%         end 
-%         
-%     end
-% end
-% 
-% figure(f1)
-% grid on
-% xlabel("\theta_{r, d} [rad]")
-% ylabel("\theta_0 [rad]")
-% % legend("Unstable", "Stable")
-% xlim([phi(1), phi(end)])
-% title("Equilibria of Zero Dynamics: \theta_0")
-% 
-% figure(f2)
-% grid on
-% xlabel("\theta_{r, d} [rad]")
-% ylabel("\theta_1 [rad]")
-% % legend("Unstable", "Stable")
-% xlim([phi(1), phi(end)])
-% title("Equilibria of Zero Dynamics: \theta_1")
+f1 = figure;
+f2 = figure;
+
+for i = 1:length(phi)
+    figure(f1)
+    hold on
+    for j = 1:size(filtered_equilibria{i}, 1)
+        
+        if(stability{i}(j))
+            plot(phi(i), filtered_equilibria{i}(j, 1), 'bx')
+        else
+            plot(phi(i), filtered_equilibria{i}(j, 1), 'rx')
+        end 
+        
+    end
+
+    figure(f2)
+    hold on
+    for j = 1:size(filtered_equilibria{i}, 1)
+        
+        if(stability{i}(j))
+            plot(phi(i), filtered_equilibria{i}(j, 2), 'bx')
+        else
+            plot(phi(i), filtered_equilibria{i}(j, 2), 'rx')
+        end 
+        
+    end
+end
+
+figure(f1)
+grid on
+xlabel("\theta_{r, d} [rad]")
+ylabel("\theta_0 [rad]")
+% legend("Unstable", "Stable")
+xlim([phi(1), phi(end)])
+title("Equilibria of Zero Dynamics: \theta_0")
+
+figure(f2)
+grid on
+xlabel("\theta_{r, d} [rad]")
+ylabel("\theta_1 [rad]")
+% legend("Unstable", "Stable")
+xlim([phi(1), phi(end)])
+title("Equilibria of Zero Dynamics: \theta_1")
 
 %% Function
 function equil = filterEquilibria(equilibria)
