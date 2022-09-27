@@ -9,7 +9,7 @@ x3 = theta_r_dot;
 x4 = [theta0_dot; theta1_dot];
 x = [x1; x2; x3; x4];
 %% Alpha Output
-h = [1 1 1/2 0 0 0]*x;
+h = [1 0 0 0 0 0]*x;
 LfH = jacobian(h, x)*F;
 LgH = jacobian(h, x)*G;
 Lf2H = jacobian(LfH, x)*F;
@@ -19,7 +19,7 @@ disp("Secondo ordine calcolato");
 % Lf3H = jacobian(Lf2H, x)*F;
 % Lg2LfH = jacobian(Lf2H, x)*G;
 
-Phi = [1 1 1/2 0 0 0; 0 0 0 1 1 1/2; 0 1 0 0 0 0; 0 0 1 0 0 0; 0 0 0 0 1 0; 0 0 0 0 0 1]*x;
+Phi = [1 0 0 0 0 0; 0 0 0 1 0 0; 0 1 0 0 0 0; 0 0 1 0 0 0; 0 0 0 0 1 0; 0 0 0 0 0 1]*x;
 diffPhi = jacobian(Phi, x);
 % Verify that is a consistent change of variables
 % det(diffPhi)
@@ -61,7 +61,7 @@ for j = 1:n_try
     end
 end
 
-save("equilibriaZeroAlpha.mat", "equilibria");
+% save("equilibriaZeroAlpha.mat", "equilibria");
 
 %% Cartesian Output
 % h = simplify(cos(theta_r)*subs(x_s, s, 1) - sin(theta_r)*subs(y_s, s, 1));

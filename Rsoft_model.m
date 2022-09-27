@@ -51,6 +51,12 @@ Tis = Ti0*T0s;
 p_sd_hom = simplify(Tis*[d*D; 0; 0; 1]);
 p_sd = p_sd_hom(1:3);
 
+%% Forward Kinematics Function
+alpha_I = theta_r + alpha;
+pos = simplify(p_sd(1:2));
+
+ matlabFunction([pos; alpha_I], 'File', 'forwardRSIP', 'Vars', [theta; L; D; d; s], 'Outputs', {'fwdKin'});
+
 %% Differential Kinematics
 J_sd = sym(zeros(2, length(theta)));
 
@@ -120,6 +126,34 @@ potential = simplify(G + K*theta);
 % end
 % 
 % save("equilibria_tau.mat", "equilibria");
+
+% Zero Dynamics (phi)
+% To compute equilibria with numerical solutions
+step_phi = pi/100;
+
+phi = -pi:step_phi:pi;
+
+n_try = 10;
+for i = 1:length(phi)
+    equilibria_equation = eval(simplify(subs(potential(2:3), [m; g; k; L; D; theta_r], [1; 9.81; 1; 1; 0.1; phi(i)])) == [0; 0]*0);
+
+
+
+    for j = 1:n_try
+        solutions = vpasolve(equilibria_equation, theta, 'Random', true);
+        disp("Equilibrium for phi =" + num2str(phi(i)) + " | Tentative: " + num2str(j));
+
+        if(isempty(solutions.theta0))
+            equilibria{i}(j, 1) = nan;
+            equilibria{i}(j, 2) = nan;
+        else
+            equilibria{i}(j, 1) = double(solutions.theta0);
+            equilibria{i}(j, 2) = double(solutions.theta1);
+        end
+    end
+end
+
+% save("equilibria_phi.mat", "equilibria");
 
 for i = 1:length(potential)
     for j = 1: length(theta)
