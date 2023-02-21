@@ -18,6 +18,9 @@ theta_dot = [theta_r_dot; theta0_dot; theta1_dot];
 
 syms m k g beta beta_r real
 
+% Consider elasticity in the revolute joint
+syms k_r real
+
 phi = 0;
 %% Orientation of SoR {S0} w.r.t. {I}
 Ri0 = my_rot(theta_r, 'z');
@@ -35,6 +38,20 @@ fresn_sin2 = fresnels(theta0 *  sqrt(1/(pi*theta1)) );
 fresn_cos1 = fresnelc((theta0 + s*theta1) * sqrt(1/(pi*theta1)));
 fresn_cos2 = fresnelc(theta0 * sqrt(1/(pi*theta1)) );
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Here, Della Santina writes spatial coordinates, supposing the tangential%
+% versor is: t(s) = [-sin(alpha); cos(alpha)].                            %
+% In my notation, it has to be t(s) = [cos(alpha); sin(alpha)].           %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% % My version t(s) = [cos(alpha); sin(alpha)]
+% x_s = L*(cos((theta0^2)/(2*theta1)) * sqrt(pi/theta1) * (fresn_cos1 - fresn_cos2) ...
+%      + sin((theta0^2)/(2*theta1)) * sqrt(pi/theta1) * (fresn_sin1 - fresn_sin2));
+% 
+% y_s = -L*(sin((theta0^2)/(2*theta1)) * sqrt(pi/theta1) * (fresn_cos1 - fresn_cos2) ...
+%      - cos((theta0^2)/(2*theta1)) * sqrt(pi/theta1) * (fresn_sin1 - fresn_sin2));
+
+% Della Santina's version t(s) = [cos(alpha); sin(alpha)]
 x_s = L*(sin((theta0^2)/(2*theta1)) * sqrt(pi/theta1) * (fresn_cos1 - fresn_cos2) ...
      - cos((theta0^2)/(2*theta1)) * sqrt(pi/theta1) * (fresn_sin1 - fresn_sin2));
  
@@ -55,7 +72,7 @@ p_sd = p_sd_hom(1:3);
 alpha_I = theta_r + alpha;
 pos = simplify(p_sd(1:2));
 
- matlabFunction([pos; alpha_I], 'File', 'forwardRSIP', 'Vars', [theta; L; D; d; s], 'Outputs', {'fwdKin'});
+% matlabFunction([pos; alpha_I], 'File', 'forwardRSIP', 'Vars', [theta; L; D; d; s], 'Outputs', {'fwdKin'});
 
 %% Differential Kinematics
 J_sd = sym(zeros(2, length(theta)));
@@ -90,7 +107,9 @@ disp("Gravità Calcolata!");
 %% Elastic and Damping
 H2 = henkelMatrix(2);
 
-K = k*blkdiag(0, H2);
+% including stiffness of revolute joint
+K = blkdiag(k_r, k*H2);
+
 Damp = blkdiag(beta_r, beta*H2);
 %% Coriolis
 C = christoffel(B, theta, theta_dot);
@@ -99,6 +118,44 @@ disp("Matrice di Coriolis Calcolata!");
 %% Equilibria
 potential = simplify(G + K*theta);
 
+%% Equilibria: Varying Stiffness
+% To compute equilibria with numerical solutions
+step_k = 0.5;
+k_values = 1e-5:step_k:10;
+
+% Number of trials
+n_try = 10;
+
+% Autonomous System
+tau_r = 0;
+
+for i = 1:length(k_values)
+    for j = 1:length(k_values)
+        equilibria_equation = simplify(subs(potential, [m; g; k_r; k; L; D], [1; 9.81; k_values(i); k_values(j); 1; 0.1])) == [1; 0; 0]*tau_r;
+        
+        % Numerical Solutions
+        for h = 1:n_try
+            solutions = vpasolve(equilibria_equation, theta, 'Random', true);
+    
+            if(isempty(solutions.theta_r))
+                equilibria{i, j}(h, 1) = nan;
+                equilibria{i, j}(h, 2) = nan;
+                equilibria{i, j}(h, 3) = nan;
+            else
+                equilibria{i, j}(h, 1) = double(solutions.theta_r);
+                equilibria{i, j}(h, 2) = double(solutions.theta0);
+                equilibria{i, j}(h, 3) = double(solutions.theta1);
+            end
+
+            % Display to monitoring
+            disp("Iteration n " + num2str(h) + " | k = " + num2str(k_values(j)) + " | k_r = " + num2str(k_values(i)));
+        end
+    end
+end
+
+save("equilibria_stiffness.mat", "equilibria");
+
+%% Equilibria: Varying Torque
 % % To compute equilibria with numerical solutions
 % step_tau = 0.5;
 % 
@@ -127,34 +184,36 @@ potential = simplify(G + K*theta);
 % 
 % save("equilibria_tau.mat", "equilibria");
 
-% Zero Dynamics (phi)
-% To compute equilibria with numerical solutions
-step_phi = pi/100;
+%% Equilibria: Zero Dynamics
+% % Zero Dynamics (phi)
+% % To compute equilibria with numerical solutions
+% step_phi = pi/100;
+% 
+% phi = -pi:step_phi:pi;
+% 
+% n_try = 10;
+% for i = 1:length(phi)
+%     equilibria_equation = eval(simplify(subs(potential(2:3), [m; g; k; L; D; theta_r], [1; 9.81; 1; 1; 0.1; phi(i)])) == [0; 0]*0);
+% 
+% 
+% 
+%     for j = 1:n_try
+%         solutions = vpasolve(equilibria_equation, theta, 'Random', true);
+%         disp("Equilibrium for phi =" + num2str(phi(i)) + " | Tentative: " + num2str(j));
+% 
+%         if(isempty(solutions.theta0))
+%             equilibria{i}(j, 1) = nan;
+%             equilibria{i}(j, 2) = nan;
+%         else
+%             equilibria{i}(j, 1) = double(solutions.theta0);
+%             equilibria{i}(j, 2) = double(solutions.theta1);
+%         end
+%     end
+% end
+% 
+% % save("equilibria_phi.mat", "equilibria");
 
-phi = -pi:step_phi:pi;
-
-n_try = 10;
-for i = 1:length(phi)
-    equilibria_equation = eval(simplify(subs(potential(2:3), [m; g; k; L; D; theta_r], [1; 9.81; 1; 1; 0.1; phi(i)])) == [0; 0]*0);
-
-
-
-    for j = 1:n_try
-        solutions = vpasolve(equilibria_equation, theta, 'Random', true);
-        disp("Equilibrium for phi =" + num2str(phi(i)) + " | Tentative: " + num2str(j));
-
-        if(isempty(solutions.theta0))
-            equilibria{i}(j, 1) = nan;
-            equilibria{i}(j, 2) = nan;
-        else
-            equilibria{i}(j, 1) = double(solutions.theta0);
-            equilibria{i}(j, 2) = double(solutions.theta1);
-        end
-    end
-end
-
-% save("equilibria_phi.mat", "equilibria");
-
+%% Computing Stiffness Matrix to Stability Analysis
 for i = 1:length(potential)
     for j = 1: length(theta)
         Stiff_Mat(i, j) = diff(potential(i), theta(j));
@@ -163,6 +222,8 @@ end
 
 % matlabFunction(Stiff_Mat, 'File', 'stiffMatrix', 'Vars', [theta; m; g; k; L; D], 'Outputs', {'St_Mat'});
 disp("Stiffness Matrix computed");
+
+% K_equilibria = eval(eval(subs(Stiff_Mat, theta, [0; 0; 1e-9])))
 
 %% State Space
 x1 = theta;
