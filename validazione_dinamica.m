@@ -19,20 +19,15 @@ k = 1;
 threshold = 1e-3;
 
 %% Computational Cost Analysis
-% disp("Inertia Matrix Computational time:")
-% tic
-% inertiaMatrix(pi/4, pi/4, -pi/4, m, L, D);
-% toc
-% 
-% disp("Gravity Vector Computational time:")
-% tic
-% gravityVector(pi/4, pi/4, -pi/4, m, g, L, D);
-% toc
-% 
-% disp("Coriolis Matrix Computational time:")
-% tic
-% coriolisMatrix(pi/4, pi/4, -pi/4, pi/20, pi/20, -pi/20, m, L, D);
-% toc
+tic
+inertiaMatrix(pi/4, pi/4, -pi/4, m, L, D);
+inertia_comp = toc; %[s]
+disp("Inertia Matrix Computational time:" + num2str(inertia_comp) + " seconds.")
+
+tic
+gravityVector(pi/4, pi/4, -pi/4, m, g, L, D);
+gravity_comp = toc; %[s]
+disp("Gravity Vector Computational time:" + num2str(gravity_comp) + " seconds.")
 %% Validation Gravity Vector
 % [THETA0, THETA1] = meshgrid(-10:0.1:10, -10:0.1:10);
 % THETAR = 0*THETA0;
@@ -308,13 +303,14 @@ end
 % zlabel("Condition Number of myBr");
 % view(23, 21);
 
+% Condition Number of Inertia Matrix
 s5 = surf(THETA0, THETA1, condBr);
 s5.EdgeColor = 'none';
 xlabel("\theta_0");
 ylabel("\theta_1");
 zlabel("\chi(M)");
 view(23, 21);
-title("Condition Number of Inertia Matrix (Curv.)")
+title("Condition Number of Inertia Matrix (CP)")
 % zlim([0, 1e+6]);
 colorbar
 

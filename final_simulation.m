@@ -94,7 +94,7 @@ axis equal
 % plot_Rsoft(result.simout.data(end, :), L, D, 0.1)
 % hold off
 %% Rec Video
-rec = true;
+rec = false;
 close all
 
 if rec
