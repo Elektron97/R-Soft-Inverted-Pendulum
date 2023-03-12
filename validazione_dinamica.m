@@ -19,15 +19,15 @@ k = 1;
 threshold = 1e-3;
 
 %% Computational Cost Analysis
-tic
-inertiaMatrix(pi/4, pi/4, -pi/4, m, L, D);
-inertia_comp = toc; %[s]
-disp("Inertia Matrix Computational time:" + num2str(inertia_comp) + " seconds.")
-
-tic
-gravityVector(pi/4, pi/4, -pi/4, m, g, L, D);
-gravity_comp = toc; %[s]
-disp("Gravity Vector Computational time:" + num2str(gravity_comp) + " seconds.")
+% tic
+% inertiaMatrix(pi/4, pi/4, -pi/4, m, L, D);
+% inertia_comp = toc; %[s]
+% disp("Inertia Matrix Computational time:" + num2str(inertia_comp) + " seconds.")
+% 
+% tic
+% gravityVector(pi/4, pi/4, -pi/4, m, g, L, D);
+% gravity_comp = toc; %[s]
+% disp("Gravity Vector Computational time:" + num2str(gravity_comp) + " seconds.")
 %% Validation Gravity Vector
 % [THETA0, THETA1] = meshgrid(-10:0.1:10, -10:0.1:10);
 % THETAR = 0*THETA0;
