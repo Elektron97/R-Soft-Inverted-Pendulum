@@ -6,6 +6,7 @@ arguments
     L
     D
     options.length_arrow double = L/10
+    options.backbone_thick = 2
     options.plot_frame = true
     options.plot_thick = true
     options.color = [0, 0.4470, 0.7410]
@@ -92,12 +93,12 @@ for i = 1:length(s)
 end
 
 % 1D Soft Segment
-plot3(p_s(1, :), p_s(2, :), p_s(3, :), 'linewidth', 2, 'color', options.color)
+plot3(p_s(1, :), p_s(2, :), p_s(3, :), 'linewidth', options.backbone_thick, 'color', options.color)
 
 if options.plot_thick
     % Thickness
-    plot3(p_sd_down(1, :), p_sd_down(2, :), p_sd_down(3, :), 'color', options.color)
-    plot3(p_sd_up(1, :), p_sd_up(2, :), p_sd_up(3, :), 'color', options.color)
+    plot3(p_sd_down(1, :), p_sd_down(2, :), p_sd_down(3, :), 'color', options.color, 'linewidth', options.backbone_thick/4)
+    plot3(p_sd_up(1, :), p_sd_up(2, :), p_sd_up(3, :), 'color', options.color, 'linewidth', options.backbone_thick/4)
 end
 
 hold off
