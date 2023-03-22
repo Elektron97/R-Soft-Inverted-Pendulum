@@ -19,6 +19,10 @@ k = 1;
 theta_init = [0; pi/4; -pi/4];
 theta_dot_init = zeros(3, 1);
 
+% Useful colors
+gray_col = [0.7, 0.7, 0.7];
+htmlGray = [128 128 128]/255;
+
 %% LQR: optimal gains PD
 A_lin = [0 1; 0 0];
 B_lin = [0; -1];
@@ -86,13 +90,24 @@ axis equal
 % ylabel("\tau [N m]");
 % title("Actuation");
 
-% close all
+%% Multiple Frame Plot
+close all
 % figure
-% plot_Rsoft(result.simout.data(930, :), L, D, 0.1)
-% plot_Rsoft([1.7; 3.1795; -3.81139], L, D, 0.1)
+% plot_Rsoft([1.7; 3.1795; -3.81139], L, D)
 % hold on
-% plot_Rsoft(result.simout.data(end, :), L, D, 0.1)
+% plot_Rsoft(result.simout.data(930, :), L, D, plot_frame=false, plot_thick=false, color=gray_col)
+% plot_Rsoft(result.simout.data(end, :), L, D)
 % hold off
+
+step = 10; % skip frames
+
+figure
+hold on
+for i = 1:step:length(result.simout.time)
+    plot_Rsoft(result.simout.data(i, :), L, D, plot_frame=false, plot_thick=false, color=gray_col)
+end
+hold off
+
 %% Rec Video
 rec = false;
 close all
@@ -106,7 +121,7 @@ fig = figure;
 fig.WindowState = 'fullscreen';
 for i = 1:length(result.simout.time)
     subplot(2, 2, [1 3])
-    plot_Rsoft([result.simout.data(i, 1); result.simout.data(i, 2); result.simout.data(i, 3)], L, D, 0.1)
+    plot_Rsoft([result.simout.data(i, 1); result.simout.data(i, 2); result.simout.data(i, 3)], L, D)
    
     subplot(2, 2, 2)
     plot(result.simout.time(1:i), result.simout.data(1:i, :))

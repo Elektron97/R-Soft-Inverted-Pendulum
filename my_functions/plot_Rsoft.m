@@ -1,5 +1,16 @@
 %%%%%%%%%%%%%%%% Plot R-Soft Inverted Pendulum %%%%%%%%%%%%%%%
-function plot_Rsoft(theta, L, D, length_arrow)
+function plot_Rsoft(theta, L, D, options)
+%% Manage Options
+arguments
+    theta
+    L
+    D
+    options.length_arrow double = L/10
+    options.plot_frame = true
+    options.plot_thick = true
+    options.color = [0, 0.4470, 0.7410]
+end
+
 %% Local Variables
 theta_r = theta(1);
 theta0 = theta(2);
@@ -12,11 +23,14 @@ Ti0 = blkdiag(Ri0, 1);
 %% Plot R-Soft Inverted Pendulum
 %Inertial Frame
 Ti = eye(4);
-trplot(Ti, 'frame', 'I', 'color', 'k', 'length', length_arrow)
-hold on
 
-%S0 Frame
-trplot(Ti0, 'frame', 'S0', 'length', length_arrow, 'color', 'r')
+hold on
+if options.plot_frame
+    trplot(Ti, 'frame', 'I', 'color', 'k', 'length', options.length_arrow)
+    
+    %S0 Frame
+    trplot(Ti0, 'frame', 'S0', 'length', options.length_arrow, 'color', 'r')
+end
 
 %Ss Frames
 s_step = 0.01;
@@ -62,8 +76,8 @@ for i = 1:length(s)
     T0s = [my_rot(alpha(i), 'z') p_s_hom(1:3); zeros(1, 3) 1] ;
     
     %% Plot Ss frame
-    if(s(i)==1)
-        trplot(Ti0*T0s, 'frame', 'S1', 'length', length_arrow, 'color', 'r')
+    if(s(i)==1 && options.plot_frame)
+        trplot(Ti0*T0s, 'frame', 'S1', 'length', options.length_arrow, 'color', 'r')
     end
     
     for d=-0.5:d_step:0.5
@@ -78,14 +92,17 @@ for i = 1:length(s)
 end
 
 % 1D Soft Segment
-plot3(p_s(1, :), p_s(2, :), p_s(3, :), 'linewidth', 2, 'color', [0, 0.4470, 0.7410])
+plot3(p_s(1, :), p_s(2, :), p_s(3, :), 'linewidth', 2, 'color', options.color)
 
-% Thickness
-plot3(p_sd_down(1, :), p_sd_down(2, :), p_sd_down(3, :), 'color', [0, 0.4470, 0.7410])
-plot3(p_sd_up(1, :), p_sd_up(2, :), p_sd_up(3, :), 'color', [0, 0.4470, 0.7410])
+if options.plot_thick
+    % Thickness
+    plot3(p_sd_down(1, :), p_sd_down(2, :), p_sd_down(3, :), 'color', options.color)
+    plot3(p_sd_up(1, :), p_sd_up(2, :), p_sd_up(3, :), 'color', options.color)
+end
+
 hold off
 
-xlim([-1 1])
-ylim([-1 1])
+xlim([-L L])
+ylim([-L L])
 grid on
 end
