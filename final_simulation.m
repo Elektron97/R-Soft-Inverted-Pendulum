@@ -92,21 +92,27 @@ axis equal
 
 %% Multiple Frame Plot
 close all
-% figure
-% plot_Rsoft([1.7; 3.1795; -3.81139], L, D)
-% hold on
-% plot_Rsoft(result.simout.data(930, :), L, D, plot_frame=false, plot_thick=false, color=gray_col)
-% plot_Rsoft(result.simout.data(end, :), L, D)
-% hold off
-
 step = 10; % skip frames
 
+% figure
+% hold on
+% for i = 1:step:length(result.simout.time)
+%     plot_Rsoft(result.simout.data(i, :), L, D, plot_frame=false, plot_thick=false, color=gray_col)
+% end
+% plot_Rsoft(result.simout.data(1, :), L, D, plot_frame=false, plot_thick=false)
+% plot_Rsoft([1.7; 3.1795; -3.81139], L, D, plot_frame=false, plot_thick=false)
+% plot_Rsoft(result.simout.data(920, :), L, D, plot_frame=false, plot_thick=false)
+% plot_Rsoft(result.simout.data(930, :), L, D, plot_frame=false, plot_thick=false)
+% plot_Rsoft(result.simout.data(end, :), L, D, plot_frame=false, plot_thick=false)
+% hold off
+
+% Multiple Frame Plot with Different Phases
+% Phase 1
 figure
 hold on
 for i = 1:step:length(result.simout.time)
     plot_Rsoft(result.simout.data(i, :), L, D, plot_frame=false, plot_thick=false, color=gray_col)
 end
-hold off
 
 %% Rec Video
 rec = false;
