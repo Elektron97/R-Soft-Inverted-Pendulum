@@ -119,41 +119,41 @@ disp("Matrice di Coriolis Calcolata!");
 potential = simplify(G + K*theta);
 
 %% Equilibria: Varying Stiffness
-% To compute equilibria with numerical solutions
-step_k = 0.5;
-k_values = 1e-5:step_k:10;
-
-% Number of trials
-n_try = 10;
-
-% Autonomous System
-tau_r = 0;
-
-for i = 1:length(k_values)
-    for j = 1:length(k_values)
-        equilibria_equation = simplify(subs(potential, [m; g; k_r; k; L; D], [1; 9.81; k_values(i); k_values(j); 1; 0.1])) == [1; 0; 0]*tau_r;
-        
-        % Numerical Solutions
-        for h = 1:n_try
-            solutions = vpasolve(equilibria_equation, theta, 'Random', true);
-    
-            if(isempty(solutions.theta_r))
-                equilibria{i, j}(h, 1) = nan;
-                equilibria{i, j}(h, 2) = nan;
-                equilibria{i, j}(h, 3) = nan;
-            else
-                equilibria{i, j}(h, 1) = double(solutions.theta_r);
-                equilibria{i, j}(h, 2) = double(solutions.theta0);
-                equilibria{i, j}(h, 3) = double(solutions.theta1);
-            end
-
-            % Display to monitoring
-            disp("Iteration n " + num2str(h) + " | k = " + num2str(k_values(j)) + " | k_r = " + num2str(k_values(i)));
-        end
-    end
-end
-
-save("equilibria_stiffness.mat", "equilibria");
+% % To compute equilibria with numerical solutions
+% step_k = 0.5;
+% k_values = 1e-5:step_k:10;
+% 
+% % Number of trials
+% n_try = 10;
+% 
+% % Autonomous System
+% tau_r = 0;
+% 
+% for i = 1:length(k_values)
+%     for j = 1:length(k_values)
+%         equilibria_equation = simplify(subs(potential, [m; g; k_r; k; L; D], [1; 9.81; k_values(i); k_values(j); 1; 0.1])) == [1; 0; 0]*tau_r;
+% 
+%         % Numerical Solutions
+%         for h = 1:n_try
+%             solutions = vpasolve(equilibria_equation, theta, 'Random', true);
+% 
+%             if(isempty(solutions.theta_r))
+%                 equilibria{i, j}(h, 1) = nan;
+%                 equilibria{i, j}(h, 2) = nan;
+%                 equilibria{i, j}(h, 3) = nan;
+%             else
+%                 equilibria{i, j}(h, 1) = double(solutions.theta_r);
+%                 equilibria{i, j}(h, 2) = double(solutions.theta0);
+%                 equilibria{i, j}(h, 3) = double(solutions.theta1);
+%             end
+% 
+%             % Display to monitoring
+%             disp("Iteration n " + num2str(h) + " | k = " + num2str(k_values(j)) + " | k_r = " + num2str(k_values(i)));
+%         end
+%     end
+% end
+% 
+% save("equilibria_stiffness.mat", "equilibria");
 
 %% Equilibria: Varying Torque
 % % To compute equilibria with numerical solutions
@@ -226,21 +226,29 @@ disp("Stiffness Matrix computed");
 % K_equilibria = eval(eval(subs(Stiff_Mat, theta, [0; 0; 1e-9])))
 
 %% State Space
-x1 = theta;
-x2 = theta_dot;
-
-x = [x1; x2];
-inv_B = inv(B);
-S = [1 0 0]';
-
-F = [x2; -inv_B*(C*x2 + G + K*x1 + D*x2)];
-G = [zeros(3, 1); inv_B*S];
+% x1 = theta;
+% x2 = theta_dot;
+% 
+% x = [x1; x2];
+% inv_B = inv(B);
+% S = [1 0 0]';
+% 
+% F = [x2; -inv_B*(C*x2 + G + K*x1 + D*x2)];
+% G = [zeros(3, 1); inv_B*S];
 
 %% Linearization
-% A = simplify(subs(jacobian(F, x), x2, zeros(3, 1)));
+% Avoid recomputing inverse of inertia matrix
+tic
+disp("Computing Linearized System...");
+inv_B = inv(B);
 
-% Linearization of outputs
-% dh = simplify(subs(J_sd, [s; d], [1; 0]));
+% A Matrix
+A21 = -inv_B*(Stiff_Mat);
+A22 = -inv_B*Damp;
+A_lin = simplify(subs([zeros(3, 3), eye(3); A21, A22], theta_dot, zeros(3, 1)));
+disp("Symbolic Linearization computed.");
+toc
+
 %% Save Functions
 if(save_function)
     matlabFunction(B, 'File', 'inertiaMatrix', 'Vars', [theta; m; L; D], 'Outputs', {'B'});
