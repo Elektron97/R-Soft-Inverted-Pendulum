@@ -52,7 +52,7 @@ end
 
 %% Plot and Animation
 figure
-plot(result.simout.time, result.simout.data)
+plot(result.simout.time, result.simout.data, 'LineWidth', 2.0)
 grid on
 xlabel("Time [s]");
 ylabel("\theta [rad]");
@@ -60,7 +60,7 @@ ylabel("\theta [rad]");
 % % Add desired trajectory
 
 hold on
-plot(result.simout2.time, result.simout2.data);
+plot(result.simout2.time, result.simout2.data, '--', 'LineWidth', 2.0);
 hold off
 legend("\theta_r","\theta_0", "\theta_1", "\theta_{rd}");
 title("Controlled R-SIP: Pick and Place");

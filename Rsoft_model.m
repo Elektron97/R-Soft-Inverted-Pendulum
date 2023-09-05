@@ -7,6 +7,9 @@ clc
 addpath("my_functions");
 
 save_function = false;
+
+% Compute Controllability Matrix
+is_contr = true;
 %% Declare Symbolic Variables
 syms theta_r theta0 theta1 real
 syms theta_r_dot theta0_dot theta1_dot real
@@ -242,14 +245,29 @@ disp("Stiffness Matrix computed");
 tic
 disp("Computing Linearized System...");
 inv_B = inv(B);
+S = [1 0 0];
 
 % A Matrix
 A21 = -inv_B*(Stiff_Mat);
 A22 = -inv_B*Damp;
-A_lin = simplify(subs([zeros(3, 3), eye(3); A21, A22], theta_dot, zeros(3, 1)));
+A_lin = subs([zeros(3, 3), eye(3); A21, A22], theta_dot, zeros(3, 1));
+B_lin = subs([zeros(3, 1); inv_B*S'], theta_dot, zeros(3, 1));
 disp("Symbolic Linearization computed.");
 toc
 
+%% Controllability
+if(is_contr)
+    n_states = 6;
+    contr_matrix = sym(zeros(6, 6));
+    for i = 1:n_states
+        contr_matrix(:, i) = (A_lin^(i-1))*B_lin;
+    end
+
+    disp("Controllability Matrix computed.");
+
+    %% Evaluate in the two equilibria
+    subs(contr_matrix, theta, 1e-6*ones(3, 1))
+end
 %% Save Functions
 if(save_function)
     matlabFunction(B, 'File', 'inertiaMatrix', 'Vars', [theta; m; L; D], 'Outputs', {'B'});
