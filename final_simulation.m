@@ -166,7 +166,8 @@ else
     title("Config. Controlled FL: Step Trajetory")
 end
 %% Rec Video
-% Tip rec = false;
+% Tip 
+rec = false;
 close all
 
 if rec

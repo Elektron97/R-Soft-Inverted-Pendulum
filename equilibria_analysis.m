@@ -36,13 +36,13 @@ for i = 1:length(tau_r)
         
         switch(stability{i}(j))
             case -1
-                plot(tau_r(i), wrapToPi(filtered_equilibria{i}(j, 1)), 'rx')
+                plot(tau_r(i), wrapToPi(filtered_equilibria{i}(j, 1)), 'x', 'Color', "#E3170A")
                 
             case 0
-                plot(tau_r(i), wrapToPi(filtered_equilibria{i}(j, 1)), 'gx')
+                plot(tau_r(i), wrapToPi(filtered_equilibria{i}(j, 1)), '^', 'Color', "#77AC30")
                 
             case 1
-                plot(tau_r(i), wrapToPi(filtered_equilibria{i}(j, 1)), 'bx')
+                plot(tau_r(i), wrapToPi(filtered_equilibria{i}(j, 1)), 'o', 'Color', "#0072BD")
         end 
     end
 %     grid on
@@ -58,13 +58,13 @@ for i = 1:length(tau_r)
         
         switch(stability{i}(j))
             case -1
-                plot(tau_r(i), filtered_equilibria{i}(j, 2), 'rx')
+                plot(tau_r(i), filtered_equilibria{i}(j, 2), 'x', 'Color', "#E3170A")
                 
             case 0
-                plot(tau_r(i), filtered_equilibria{i}(j, 2), 'gx')
+                plot(tau_r(i), filtered_equilibria{i}(j, 2), '^', 'Color', "#77AC30")
                 
             case 1
-                plot(tau_r(i), filtered_equilibria{i}(j, 2), 'bx')
+                plot(tau_r(i), filtered_equilibria{i}(j, 2), 'o', 'Color', "#0072BD")
         end 
         
     end
@@ -81,13 +81,13 @@ for i = 1:length(tau_r)
         
         switch(stability{i}(j))
             case -1
-                plot(tau_r(i), filtered_equilibria{i}(j, 3), 'rx')
+                plot(tau_r(i), filtered_equilibria{i}(j, 3), 'x', 'Color', "#E3170A")
                 
             case 0
-                plot(tau_r(i), filtered_equilibria{i}(j, 3), 'gx')
+                plot(tau_r(i), filtered_equilibria{i}(j, 3), '^', 'Color', "#77AC30")
                 
             case 1
-                plot(tau_r(i), filtered_equilibria{i}(j, 3), 'bx')
+                plot(tau_r(i), filtered_equilibria{i}(j, 3), 'o', 'Color', "#0072BD")
         end 
         
     end
@@ -136,59 +136,59 @@ for i = 1:length(tau_r)
 end
 
 %% Plot Only Stable and Controllable Equilibria
-f4 = figure;
-f5 = figure;
-f6 = figure;
-
-for i = 1:length(tau_r)
-    figure(f4)
-    hold on
-    for j = 1:size(filtered_equilibria{i}, 1)  
-        if(local_control{i}(j))
-            plot(tau_r(i), wrapToPi(filtered_equilibria{i}(j, 1)), 'gx')
-        end
-    end
-
-    figure(f5)
-    hold on
-    for j = 1:size(filtered_equilibria{i}, 1)
-        if(local_control{i}(j))
-            plot(tau_r(i), filtered_equilibria{i}(j, 2), 'gx')
-        end
-    end
-
-    figure(f6)
-    hold on
-    for j = 1:size(filtered_equilibria{i}, 1)
-        if(local_control{i}(j))
-            plot(tau_r(i), filtered_equilibria{i}(j, 3), 'gx')
-        end
-    end
-end
-
-figure(f4)
-grid on
-title("Equilibria: \theta_r")
-xlabel("\tau")
-ylabel("\theta_r [rad]")
-hold off
-legend("Controllable")
-
-figure(f5)
-grid on
-title("Equilibria: \theta_0")
-xlabel("\tau")
-ylabel("\theta_0 [rad]")
-hold off
-legend("Controllable")
-
-figure(f6)
-grid on
-title("Equilibria: \theta_1")
-xlabel("\tau")
-ylabel("\theta_1 [rad]")
-hold off
-legend("Controllable")
+% f4 = figure;
+% f5 = figure;
+% f6 = figure;
+% 
+% for i = 1:length(tau_r)
+%     figure(f4)
+%     hold on
+%     for j = 1:size(filtered_equilibria{i}, 1)  
+%         if(local_control{i}(j))
+%             plot(tau_r(i), wrapToPi(filtered_equilibria{i}(j, 1)), 'gx')
+%         end
+%     end
+% 
+%     figure(f5)
+%     hold on
+%     for j = 1:size(filtered_equilibria{i}, 1)
+%         if(local_control{i}(j))
+%             plot(tau_r(i), filtered_equilibria{i}(j, 2), 'gx')
+%         end
+%     end
+% 
+%     figure(f6)
+%     hold on
+%     for j = 1:size(filtered_equilibria{i}, 1)
+%         if(local_control{i}(j))
+%             plot(tau_r(i), filtered_equilibria{i}(j, 3), 'gx')
+%         end
+%     end
+% end
+% 
+% figure(f4)
+% grid on
+% title("Equilibria: \theta_r")
+% xlabel("\tau")
+% ylabel("\theta_r [rad]")
+% hold off
+% legend("Controllable")
+% 
+% figure(f5)
+% grid on
+% title("Equilibria: \theta_0")
+% xlabel("\tau")
+% ylabel("\theta_0 [rad]")
+% hold off
+% legend("Controllable")
+% 
+% figure(f6)
+% grid on
+% title("Equilibria: \theta_1")
+% xlabel("\tau")
+% ylabel("\theta_1 [rad]")
+% hold off
+% legend("Controllable")
 
 %% Observability
 for i = 1:length(tau_r)
@@ -206,65 +206,65 @@ for i = 1:length(tau_r)
 end
 
 %% Plot Observability
-f7 = figure;
-f8 = figure;
-f9 = figure;
-
-for i = 1:length(tau_r)
-    figure(f7)
-    hold on
-    for j = 1:size(filtered_equilibria{i}, 1)  
-        if(local_obs{i}(j))
-            plot(tau_r(i), wrapToPi(filtered_equilibria{i}(j, 1)), 'mx')
-        else
-            plot(tau_r(i), wrapToPi(filtered_equilibria{i}(j, 1)), 'cx')
-        end
-    end
-
-    figure(f8)
-    hold on
-    for j = 1:size(filtered_equilibria{i}, 1)
-        if(local_obs{i}(j))
-            plot(tau_r(i), filtered_equilibria{i}(j, 2), 'mx')
-        else
-            plot(tau_r(i), filtered_equilibria{i}(j, 2), 'cx')
-        end
-    end
-
-    figure(f9)
-    hold on
-    for j = 1:size(filtered_equilibria{i}, 1)
-        if(local_obs{i}(j))
-            plot(tau_r(i), filtered_equilibria{i}(j, 3), 'mx')
-        else
-            plot(tau_r(i), filtered_equilibria{i}(j, 3), 'cx')
-        end
-    end
-end
-
-figure(f7)
-grid on
-title("Equilibria: \theta_r")
-xlabel("\tau")
-ylabel("\theta_r [rad]")
-hold off
-legend("Observable")
-
-figure(f8)
-grid on
-title("Equilibria: \theta_0")
-xlabel("\tau")
-ylabel("\theta_0 [rad]")
-hold off
-legend("Observable")
-
-figure(f9)
-grid on
-title("Equilibria: \theta_1")
-xlabel("\tau")
-ylabel("\theta_1 [rad]")
-hold off
-legend("Observable")
+% f7 = figure;
+% f8 = figure;
+% f9 = figure;
+% 
+% for i = 1:length(tau_r)
+%     figure(f7)
+%     hold on
+%     for j = 1:size(filtered_equilibria{i}, 1)  
+%         if(local_obs{i}(j))
+%             plot(tau_r(i), wrapToPi(filtered_equilibria{i}(j, 1)), 'mx')
+%         else
+%             plot(tau_r(i), wrapToPi(filtered_equilibria{i}(j, 1)), 'cx')
+%         end
+%     end
+% 
+%     figure(f8)
+%     hold on
+%     for j = 1:size(filtered_equilibria{i}, 1)
+%         if(local_obs{i}(j))
+%             plot(tau_r(i), filtered_equilibria{i}(j, 2), 'mx')
+%         else
+%             plot(tau_r(i), filtered_equilibria{i}(j, 2), 'cx')
+%         end
+%     end
+% 
+%     figure(f9)
+%     hold on
+%     for j = 1:size(filtered_equilibria{i}, 1)
+%         if(local_obs{i}(j))
+%             plot(tau_r(i), filtered_equilibria{i}(j, 3), 'mx')
+%         else
+%             plot(tau_r(i), filtered_equilibria{i}(j, 3), 'cx')
+%         end
+%     end
+% end
+% 
+% figure(f7)
+% grid on
+% title("Equilibria: \theta_r")
+% xlabel("\tau")
+% ylabel("\theta_r [rad]")
+% hold off
+% legend("Observable")
+% 
+% figure(f8)
+% grid on
+% title("Equilibria: \theta_0")
+% xlabel("\tau")
+% ylabel("\theta_0 [rad]")
+% hold off
+% legend("Observable")
+% 
+% figure(f9)
+% grid on
+% title("Equilibria: \theta_1")
+% xlabel("\tau")
+% ylabel("\theta_1 [rad]")
+% hold off
+% legend("Observable")
 
 %% Rigid
 % load("equilibria_elastic.mat");

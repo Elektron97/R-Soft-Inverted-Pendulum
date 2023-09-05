@@ -83,9 +83,9 @@ for i = 1:length(phi)/2
     for j = 1:size(filtered_equilibria{i}, 1)
         
         if(stability{i}(j))
-            plot(phi(i), filtered_equilibria{i}(j, 1), 'bx')
+            plot(phi(i), filtered_equilibria{i}(j, 1), 'o', 'Color', "#0072BD")
         else
-            plot(phi(i), filtered_equilibria{i}(j, 1), 'rx')
+            plot(phi(i), filtered_equilibria{i}(j, 1), 'x', 'Color', "#E3170A")
         end 
         
     end
@@ -95,9 +95,9 @@ for i = 1:length(phi)/2
     for j = 1:size(filtered_equilibria{i}, 1)
         
         if(stability{i}(j))
-            plot(phi(i), filtered_equilibria{i}(j, 2), 'bx')
+            plot(phi(i), filtered_equilibria{i}(j, 2), 'o', 'Color', "#0072BD")
         else
-            plot(phi(i), filtered_equilibria{i}(j, 2), 'rx')
+            plot(phi(i), filtered_equilibria{i}(j, 2), 'x', 'Color', "#E3170A")
         end 
         
     end
@@ -109,9 +109,9 @@ for i = 32:length(phi)
     for j = 1:size(filtered_equilibria{i}, 1)
         
         if(stability{i}(j))
-            plot(phi(i) - 2*pi, filtered_equilibria{i}(j, 1), 'bx')
+            plot(phi(i) - 2*pi, filtered_equilibria{i}(j, 1), 'o', 'Color', "#0072BD")
         else
-            plot(phi(i) - 2*pi, filtered_equilibria{i}(j, 1), 'rx')
+            plot(phi(i) - 2*pi, filtered_equilibria{i}(j, 1), 'x', 'Color', "#E3170A")
         end 
         
     end
@@ -121,9 +121,9 @@ for i = 32:length(phi)
     for j = 1:size(filtered_equilibria{i}, 1)
         
         if(stability{i}(j))
-            plot(phi(i) - 2*pi, filtered_equilibria{i}(j, 2), 'bx')
+            plot(phi(i) - 2*pi, filtered_equilibria{i}(j, 2), 'o', 'Color', "#0072BD")
         else
-            plot(phi(i) - 2*pi, filtered_equilibria{i}(j, 2), 'rx')
+            plot(phi(i) - 2*pi, filtered_equilibria{i}(j, 2), 'x', 'Color', "#E3170A")
         end 
         
     end
@@ -177,9 +177,9 @@ for i = 1:length(phi)/2
     for j = 1:size(filtered_equilibria{i}, 1)
         
         if(stability{i}(j))
-            plot3(filtered_equilibria{i}(j, 1), filtered_equilibria{i}(j, 2), phi(i), 'bx')
+            plot3(filtered_equilibria{i}(j, 1), filtered_equilibria{i}(j, 2), phi(i), 'o', 'Color', "#0072BD")
         else
-            plot3(filtered_equilibria{i}(j, 1), filtered_equilibria{i}(j, 2), phi(i), 'rx')
+            plot3(filtered_equilibria{i}(j, 1), filtered_equilibria{i}(j, 2), phi(i), 'x', 'Color', "#E3170A")
         end 
         
     end
@@ -191,9 +191,9 @@ for i = 32:length(phi)
     for j = 1:size(filtered_equilibria{i}, 1)
         
         if(stability{i}(j))
-            plot3(filtered_equilibria{i}(j, 1), filtered_equilibria{i}(j, 2), phi(i)-2*pi, 'bx')
+            plot3(filtered_equilibria{i}(j, 1), filtered_equilibria{i}(j, 2), phi(i)-2*pi, 'o', 'Color', "#0072BD")
         else
-            plot3(filtered_equilibria{i}(j, 1), filtered_equilibria{i}(j, 2), phi(i)-2*pi, 'rx')
+            plot3(filtered_equilibria{i}(j, 1), filtered_equilibria{i}(j, 2), phi(i)-2*pi, 'x', 'Color', "#E3170A")
         end 
         
     end
@@ -216,9 +216,10 @@ end
 
 % load("result_step.mat");
 load("result_PP.mat");
-plot3(result.simout.data(:, 2), result.simout.data(:, 3), result.simout.data(:, 1))
+plot3(result.simout.data(:, 2), result.simout.data(:, 3), result.simout.data(:, 1), ...
+      'Color', [0.9290 0.6940 0.1250], 'LineWidth', 2.0)
 quiver3(result.simout.data(:, 2), result.simout.data(:, 3), result.simout.data(:, 1), ...
-        result.simout3.data(:, 2), result.simout3.data(:, 3), result.simout3.data(:, 1),'Color', [0.9290 0.6940 0.1250])
+        result.simout3.data(:, 2), result.simout3.data(:, 3), result.simout3.data(:, 1),'Color', [0.4940 0.1840 0.5560])
 plot3(result.simout.data(1, 2), result.simout.data(1, 3), result.simout.data(1, 1), 'go')
 hold off
 

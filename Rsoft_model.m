@@ -108,7 +108,8 @@ disp("Gravità Calcolata!");
 H2 = henkelMatrix(2);
 
 % including stiffness of revolute joint
-K = blkdiag(k_r, k*H2);
+% K = blkdiag(k_r, k*H2);
+K = blkdiag(0, k*H2);
 
 Damp = blkdiag(beta_r, beta*H2);
 %% Coriolis
