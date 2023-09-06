@@ -83,9 +83,9 @@ for i = 1:length(phi)/2
     for j = 1:size(filtered_equilibria{i}, 1)
         
         if(stability{i}(j))
-            plot(phi(i), filtered_equilibria{i}(j, 1), 'o', 'Color', "#0072BD")
+            plot(phi(i), filtered_equilibria{i}(j, 1), 'o', 'Color', "#0072BD", 'LineWidth', 2.0)
         else
-            plot(phi(i), filtered_equilibria{i}(j, 1), 'x', 'Color', "#E3170A")
+            plot(phi(i), filtered_equilibria{i}(j, 1), 'x', 'Color', "#E3170A", 'LineWidth', 2.0)
         end 
         
     end
@@ -95,9 +95,9 @@ for i = 1:length(phi)/2
     for j = 1:size(filtered_equilibria{i}, 1)
         
         if(stability{i}(j))
-            plot(phi(i), filtered_equilibria{i}(j, 2), 'o', 'Color', "#0072BD")
+            plot(phi(i), filtered_equilibria{i}(j, 2), 'o', 'Color', "#0072BD", 'LineWidth', 2.0)
         else
-            plot(phi(i), filtered_equilibria{i}(j, 2), 'x', 'Color', "#E3170A")
+            plot(phi(i), filtered_equilibria{i}(j, 2), 'x', 'Color', "#E3170A", 'LineWidth', 2.0)
         end 
         
     end
@@ -109,9 +109,9 @@ for i = 32:length(phi)
     for j = 1:size(filtered_equilibria{i}, 1)
         
         if(stability{i}(j))
-            plot(phi(i) - 2*pi, filtered_equilibria{i}(j, 1), 'o', 'Color', "#0072BD")
+            plot(phi(i) - 2*pi, filtered_equilibria{i}(j, 1), 'o', 'Color', "#0072BD", 'LineWidth', 2.0)
         else
-            plot(phi(i) - 2*pi, filtered_equilibria{i}(j, 1), 'x', 'Color', "#E3170A")
+            plot(phi(i) - 2*pi, filtered_equilibria{i}(j, 1), 'x', 'Color', "#E3170A", 'LineWidth', 2.0)
         end 
         
     end
@@ -121,9 +121,9 @@ for i = 32:length(phi)
     for j = 1:size(filtered_equilibria{i}, 1)
         
         if(stability{i}(j))
-            plot(phi(i) - 2*pi, filtered_equilibria{i}(j, 2), 'o', 'Color', "#0072BD")
+            plot(phi(i) - 2*pi, filtered_equilibria{i}(j, 2), 'o', 'Color', "#0072BD", 'LineWidth', 2.0)
         else
-            plot(phi(i) - 2*pi, filtered_equilibria{i}(j, 2), 'x', 'Color', "#E3170A")
+            plot(phi(i) - 2*pi, filtered_equilibria{i}(j, 2), 'x', 'Color', "#E3170A", 'LineWidth', 2.0)
         end 
         
     end
@@ -136,7 +136,7 @@ xlabel("\theta_{r, d} [rad]")
 ylabel("\theta_0 [rad]")
 % legend("Unstable", "Stable")
 xlim([-pi, pi])
-title("Equilibria of Zero Dynamics: \theta_0")
+% title("Equilibria of Zero Dynamics: \theta_0")
 hold on
 xl1 = xline(-pi/2,'--',{'Blue-Sky', 'Catastrophe'}, 'Color', [0.4660 0.6740 0.1880]);
 % xl1 = xline(-pi/2,'--',{'-\pi/2'}, 'Color', [0.4660 0.6740 0.1880]);
@@ -155,7 +155,7 @@ xlabel("\theta_{r, d} [rad]")
 ylabel("\theta_1 [rad]")
 % legend("Unstable", "Stable")
 xlim([-pi, pi])
-title("Equilibria of Zero Dynamics: \theta_1")
+% title("Equilibria of Zero Dynamics: \theta_1")
 hold on
 xl1 = xline(-pi/2,'--',{'Blue-Sky', 'Catastrophe'}, 'Color', [0.4660 0.6740 0.1880]);
 % xl1 = xline(-pi/2,'--',{'-\pi/2'}, 'Color', [0.4660 0.6740 0.1880]);
@@ -240,7 +240,7 @@ ylabel("\theta_1 [rad]")
 zlabel("\theta_{rd} [rad]")
 legend("Unstable", "Stable")
 
-title("Phase Space with Equilibria: PP planner")
+% title("Phase Space with Equilibria: PP planner")
 view(109, 15)
 
 %% Function

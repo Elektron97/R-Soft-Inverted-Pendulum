@@ -300,7 +300,7 @@ xlabel("\theta_0");
 ylabel("\theta_1");
 zlabel("\chi(M)");
 view(23, 21);
-title("Condition Number of Inertia Matrix (CP)")
+% title("Condition Number of Inertia Matrix (CP)")
 % zlim([0, 1e+6]);
 colorbar
 

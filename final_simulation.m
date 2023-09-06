@@ -63,7 +63,7 @@ hold on
 plot(result.simout2.time, result.simout2.data, '--', 'LineWidth', 2.0);
 hold off
 legend("\theta_r","\theta_0", "\theta_1", "\theta_{rd}");
-title("Controlled R-SIP: Pick and Place");
+% title("Controlled R-SIP: Pick and Place");
 ylim([-15, 15])
 
 % % Phase Space
