@@ -266,7 +266,8 @@ if(is_contr)
     disp("Controllability Matrix computed.");
 
     %% Evaluate in the two equilibria
-    subs(contr_matrix, theta, 1e-6*ones(3, 1))
+    contr_zero = eval(eval(subs(contr_matrix, theta, 1e-6*ones(3, 1))));
+    contr_pi = eval(eval(subs(contr_matrix, theta, [pi; 1e-6; 1e-6])));
 end
 %% Save Functions
 if(save_function)
