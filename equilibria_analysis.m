@@ -30,6 +30,7 @@ f2 = figure;
 f3 = figure;
 
 marker_size = 6.0;
+line_width = 2.0;
 
 for i = 1:length(tau_r)
     figure(f1)
@@ -38,13 +39,13 @@ for i = 1:length(tau_r)
         
         switch(stability{i}(j))
             case -1
-                plot(tau_r(i), wrapToPi(filtered_equilibria{i}(j, 1)), 'x', 'Color', "#E3170A", 'LineWidth', 2.0, 'MarkerSize', marker_size)
+                plot(tau_r(i), wrapToPi(filtered_equilibria{i}(j, 1)), 'x', 'Color', "#E3170A", 'LineWidth', line_width, 'MarkerSize', marker_size)
                 
             case 0
-                plot(tau_r(i), wrapToPi(filtered_equilibria{i}(j, 1)), '^', 'Color', "#77AC30", 'LineWidth', 2.0, 'MarkerSize', marker_size)
+                plot(tau_r(i), wrapToPi(filtered_equilibria{i}(j, 1)), '^', 'Color', "#77AC30", 'LineWidth', line_width, 'MarkerSize', marker_size)
                 
             case 1
-                plot(tau_r(i), wrapToPi(filtered_equilibria{i}(j, 1)), 'o', 'Color', "#0072BD", 'LineWidth', 2.0, 'MarkerSize', marker_size)
+                plot(tau_r(i), wrapToPi(filtered_equilibria{i}(j, 1)), 'o', 'Color', "#0072BD", 'LineWidth', line_width, 'MarkerSize', marker_size)
         end 
     end
 %     grid on
@@ -60,13 +61,13 @@ for i = 1:length(tau_r)
         
         switch(stability{i}(j))
             case -1
-                plot(tau_r(i), filtered_equilibria{i}(j, 2), 'x', 'Color', "#E3170A", 'LineWidth', 2.0, 'MarkerSize', marker_size)
+                plot(tau_r(i), filtered_equilibria{i}(j, 2), 'x', 'Color', "#E3170A", 'LineWidth', line_width, 'MarkerSize', marker_size)
                 
             case 0
-                plot(tau_r(i), filtered_equilibria{i}(j, 2), '^', 'Color', "#77AC30", 'LineWidth', 2.0, 'MarkerSize', marker_size)
+                plot(tau_r(i), filtered_equilibria{i}(j, 2), '^', 'Color', "#77AC30", 'LineWidth', line_width, 'MarkerSize', marker_size)
                 
             case 1
-                plot(tau_r(i), filtered_equilibria{i}(j, 2), 'o', 'Color', "#0072BD", 'LineWidth', 2.0, 'MarkerSize', marker_size)
+                plot(tau_r(i), filtered_equilibria{i}(j, 2), 'o', 'Color', "#0072BD", 'LineWidth', line_width, 'MarkerSize', marker_size)
         end 
         
     end
@@ -83,13 +84,13 @@ for i = 1:length(tau_r)
         
         switch(stability{i}(j))
             case -1
-                plot(tau_r(i), filtered_equilibria{i}(j, 3), 'x', 'Color', "#E3170A", 'LineWidth', 2.0, 'MarkerSize', marker_size)
+                plot(tau_r(i), filtered_equilibria{i}(j, 3), 'x', 'Color', "#E3170A", 'LineWidth', line_width, 'MarkerSize', marker_size)
                 
             case 0
-                plot(tau_r(i), filtered_equilibria{i}(j, 3), '^', 'Color', "#77AC30", 'LineWidth', 2.0, 'MarkerSize', marker_size)
+                plot(tau_r(i), filtered_equilibria{i}(j, 3), '^', 'Color', "#77AC30", 'LineWidth', line_width, 'MarkerSize', marker_size)
                 
             case 1
-                plot(tau_r(i), filtered_equilibria{i}(j, 3), 'o', 'Color', "#0072BD", 'LineWidth', 2.0, 'MarkerSize', marker_size)
+                plot(tau_r(i), filtered_equilibria{i}(j, 3), 'o', 'Color', "#0072BD", 'LineWidth', line_width, 'MarkerSize', marker_size)
         end 
         
     end
@@ -104,7 +105,7 @@ end
 figure(f1)
 grid on
 % title("Equilibria: \theta_r")
-xlabel("\tau")
+xlabel("\tau [N \cdot m]")
 ylabel("\theta_r [rad]")
 hold off
 legend("Unstable", "Stable")
@@ -112,7 +113,7 @@ legend("Unstable", "Stable")
 figure(f2)
 grid on
 % title("Equilibria: \theta_0")
-xlabel("\tau")
+xlabel("\tau [N \cdot m]")
 ylabel("\theta_0 [rad]")
 hold off
 legend("Unstable", "Stable")
@@ -120,7 +121,7 @@ legend("Unstable", "Stable")
 figure(f3)
 grid on
 % title("Equilibria: \theta_1")
-xlabel("\tau")
+xlabel("\tau [N \cdot m]")
 ylabel("\theta_1 [rad]")
 hold off
 legend("Unstable", "Stable")

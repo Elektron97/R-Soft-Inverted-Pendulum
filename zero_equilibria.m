@@ -177,9 +177,9 @@ for i = 1:length(phi)/2
     for j = 1:size(filtered_equilibria{i}, 1)
         
         if(stability{i}(j))
-            plot3(filtered_equilibria{i}(j, 1), filtered_equilibria{i}(j, 2), phi(i), 'o', 'Color', "#0072BD")
+            plot3(filtered_equilibria{i}(j, 1), filtered_equilibria{i}(j, 2), phi(i), 'o', 'Color', "#0072BD", 'LineWidth', 1.5)
         else
-            plot3(filtered_equilibria{i}(j, 1), filtered_equilibria{i}(j, 2), phi(i), 'x', 'Color', "#E3170A")
+            plot3(filtered_equilibria{i}(j, 1), filtered_equilibria{i}(j, 2), phi(i), 'x', 'Color', "#E3170A", 'LineWidth', 1.5)
         end 
         
     end
@@ -191,9 +191,9 @@ for i = 32:length(phi)
     for j = 1:size(filtered_equilibria{i}, 1)
         
         if(stability{i}(j))
-            plot3(filtered_equilibria{i}(j, 1), filtered_equilibria{i}(j, 2), phi(i)-2*pi, 'o', 'Color', "#0072BD")
+            plot3(filtered_equilibria{i}(j, 1), filtered_equilibria{i}(j, 2), phi(i)-2*pi, 'o', 'Color', "#0072BD", 'LineWidth', 1.5)
         else
-            plot3(filtered_equilibria{i}(j, 1), filtered_equilibria{i}(j, 2), phi(i)-2*pi, 'x', 'Color', "#E3170A")
+            plot3(filtered_equilibria{i}(j, 1), filtered_equilibria{i}(j, 2), phi(i)-2*pi, 'x', 'Color', "#E3170A", 'LineWidth', 1.5)
         end 
         
     end
@@ -217,14 +217,14 @@ end
 % load("result_step.mat");
 load("result_PP.mat");
 plot3(result.simout.data(:, 2), result.simout.data(:, 3), result.simout.data(:, 1), ...
-      'Color', [0.9290 0.6940 0.1250], 'LineWidth', 1.0)
+      'Color', [0.9290 0.6940 0.1250], 'LineWidth', 1.5)
 % quiver3(result.simout.data(:, 2), result.simout.data(:, 3), result.simout.data(:, 1), ...
 %         result.simout3.data(:, 2), result.simout3.data(:, 3), result.simout3.data(:, 1),'Color', [0.4940 0.1840 0.5560])
 
 % % Start and Final Points
 % Start
-marker_width = 2;
-marker_size = 10;
+marker_width = 2.5;
+marker_size = 11;
 
 plot3(result.simout.data(1, 2), result.simout.data(1, 3), result.simout.data(1, 1), ...
         'o', 'LineWidth', marker_width, 'MarkerSize', marker_size, 'Color', "#77AC30")
@@ -238,7 +238,7 @@ grid on
 xlabel("\theta_0 [rad]")
 ylabel("\theta_1 [rad]")
 zlabel("\theta_{rd} [rad]")
-legend("Unstable", "Stable")
+% legend("Unstable", "Stable")
 
 % title("Phase Space with Equilibria: PP planner")
 view(109, 15)
