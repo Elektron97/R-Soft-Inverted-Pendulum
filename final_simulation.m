@@ -116,6 +116,10 @@ if is_pp
     
         figure
         hold on
+        % Initial Position
+        plot_Rsoft(result.simout.data(phase_time(phase), :), L, D, plot_frame=false, plot_thick=false, color=phase_color{phase})
+        % Final Position
+        plot_Rsoft(result.simout.data(phase_time(phase+1), :), L, D, plot_frame=false, plot_thick=false, color=phase_color{phase+1})
         for i = phase_time(phase):phase_time(phase+1)
             % skip_frame
             % rewrite (i % skip_frame_robot == 0) in matlab
@@ -151,6 +155,7 @@ if is_pp
         xlabel("x [m]")
         ylabel("y [m]")
         % title("Pick and Place: Phase " + num2str(phase))
+        legend("Initial Config. of Phase " + num2str(phase), "Final Config. of Phase " + num2str(phase))
     
         clear tip_traj
         clear tip_vel
