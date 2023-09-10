@@ -99,6 +99,13 @@ axis equal
 % ylabel("\tau [N m]");
 % title("Actuation");
 
+% % Final Configuration
+figure
+plot_Rsoft(result.simout.data(end, :), L, D, "plot_frame", false, "plot_thick", true, 'backbone_thick', 3.0)
+xlabel("x [m]")
+ylabel("y [m]")
+axis equal
+
 %% Multiple Frame Plot
 close all
 
