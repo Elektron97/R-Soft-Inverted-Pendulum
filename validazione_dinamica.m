@@ -295,8 +295,8 @@ end
 
 % Condition Number of Inertia Matrix
 s5 = surf(THETA0, THETA1, condBr);
-s5.LineStyle = ":";
-% s5.EdgeColor = 'none';
+% s5.LineStyle = ":";
+s5.EdgeColor = 'none';
 xlabel("\theta_0");
 ylabel("\theta_1");
 zlabel("log(\chi(M))");
