@@ -295,14 +295,17 @@ end
 
 % Condition Number of Inertia Matrix
 s5 = surf(THETA0, THETA1, condBr);
-s5.EdgeColor = 'none';
+s5.LineStyle = ":";
+% s5.EdgeColor = 'none';
 xlabel("\theta_0");
 ylabel("\theta_1");
-zlabel("\chi(M)");
-view(82, 12);
+zlabel("log(\chi(M))");
+view(48, 13);
 % title("Condition Number of Inertia Matrix (CP)")
+set(gca, 'ZScale', 'log')
 % zlim([0, 1e+6]);
 colorbar
+set(gca, 'ColorScale', 'log')
 
 %%%%%%%%%%%%%%%% Norm of Difference %%%%%%%%%%%%%%%
 % figure
