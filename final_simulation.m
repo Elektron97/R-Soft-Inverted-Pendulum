@@ -12,6 +12,7 @@ L = 1;
 D = 0.1;
 
 m = 1;
+m_obj = 0.0;
 g = 9.81;
 beta_r = 0.5;
 beta = 0.1;
@@ -42,7 +43,7 @@ Kp = -K(1);
 Kd = -K(2);
 
 %% Simulation
-is_pp = true;
+is_pp = false;
 if is_pp
     load_system('pick_place.slx');
     result=sim('pick_place.slx', 'ReturnWorkspaceOutputs','on'); %simulate and extract results
@@ -110,10 +111,10 @@ skip_frame_robot = 5;
 if is_pp
     phase_time = [1, 739, 928, length(result.simout.time)];
     phase_color = {green_col, orange_col, cool_yellow, celeste_figo};
-    
+
     %%%%% Cicle on Phases
     for phase=1:3
-    
+
         figure
         hold on
         % Initial Position
@@ -156,7 +157,7 @@ if is_pp
         ylabel("y [m]")
         % title("Pick and Place: Phase " + num2str(phase))
         legend("Initial Config. of Phase " + num2str(phase), "Final Config. of Phase " + num2str(phase))
-    
+
         clear tip_traj
         clear tip_vel
     end
@@ -190,51 +191,53 @@ if rec
 end
 
 fig = figure;
-fig.WindowState = 'fullscreen';
+% fig.WindowState = 'fullscreen';
 for i = 1:length(result.simout.time)
     subplot(2, 2, [1 3])
-    plot_Rsoft([result.simout.data(i, 1); result.simout.data(i, 2); result.simout.data(i, 3)], L, D)
+        cla reset % avoid multiple frame
+        plot_Rsoft([result.simout.data(i, 1); result.simout.data(i, 2); result.simout.data(i, 3)], L, D);
+        hold off
    
     subplot(2, 2, 2)
-    plot(result.simout.time(1:i), result.simout.data(1:i, :))
-    hold on
-     plot(result.simout2.time(1:i), result.simout2.data(1:i, :))
-    hold off
-    grid on
-    legend("\theta_r","\theta_0", "\theta_1", "\theta_rd");
-    xlabel("Time [s]");
-    ylabel("\theta [rad]");
-    title("Trajectory");
+        plot(result.simout.time(1:i), result.simout.data(1:i, :))
+        hold on
+         plot(result.simout2.time(1:i), result.simout2.data(1:i, :))
+        hold off
+        grid on
+        legend("\theta_r","\theta_0", "\theta_1", "\theta_rd");
+        xlabel("Time [s]");
+        ylabel("\theta [rad]");
+        title("Trajectory");
 
     
     subplot(2, 2, 4)
-%     plot(result.simout1.time(1:i), result.simout1.data(1:i))
-%     grid on
-%     xlabel("Time [s]");
-%     ylabel("\tau [N m]");
-%     title("Actuation");
+    %     plot(result.simout1.time(1:i), result.simout1.data(1:i))
+    %     grid on
+    %     xlabel("Time [s]");
+    %     ylabel("\tau [N m]");
+    %     title("Actuation");
 
-    plot3(result.simout.data(1:i, 2), result.simout.data(1:i, 3), result.simout.data(1:i, 1))
-    title("Phase Space")
-    grid on
-    xlabel("\theta_0")
-    ylabel("\theta_1")
-    zlabel("\theta_r")
+        plot3(result.simout.data(1:i, 2), result.simout.data(1:i, 3), result.simout.data(1:i, 1))
+        title("Phase Space")
+        grid on
+        xlabel("\theta_0")
+        ylabel("\theta_1")
+        zlabel("\theta_r")
     
     % % Add initial and final position
     
-%     hold on
-%     plot3(result.simout.data(1, 2), result.simout.data(1, 3), result.simout.data(1, 1), 'rx')
-%     plot3(result.simout.data(end, 2), result.simout.data(end, 3), result.simout.data(end, 1), 'gx')
-%     hold off
+    %     hold on
+    %     plot3(result.simout.data(1, 2), result.simout.data(1, 3), result.simout.data(1, 1), 'rx')
+    %     plot3(result.simout.data(end, 2), result.simout.data(end, 3), result.simout.data(end, 1), 'gx')
+    %     hold off
     
     
     % Add quiver3
-    hold on
-    quiver3(result.simout.data(1:i, 2), result.simout.data(1:i, 3), result.simout.data(1:i, 1), ...
-            result.simout3.data(1:i, 2), result.simout3.data(1:i, 3), result.simout3.data(1:i, 1))
-    hold off
-    axis equal
+        hold on
+        quiver3(result.simout.data(1:i, 2), result.simout.data(1:i, 3), result.simout.data(1:i, 1), ...
+                result.simout3.data(1:i, 2), result.simout3.data(1:i, 3), result.simout3.data(1:i, 1))
+        hold off
+        axis equal
 
     if rec
         frame = getframe(gcf);
