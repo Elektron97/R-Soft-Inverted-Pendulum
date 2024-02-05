@@ -134,7 +134,7 @@ for i = 1:size(THETA0, 1)
         
         condB(i, j) = cond(real(testB));
         condSantina(i, j) = cond(real(santinaB));
-        condBr(i, j) = cond(real(testBr));
+        condBr_cp(i, j) = cond(real(testBr));
         
         B11(i, j) = testB(1, 1);
         B12(i, j) = testB(1, 2);
@@ -294,7 +294,7 @@ end
 % view(23, 21);
 
 % Condition Number of Inertia Matrix
-s5 = surf(THETA0, THETA1, condBr);
+s5 = surf(THETA0, THETA1, condBr_cp);
 % s5.LineStyle = ":";
 s5.EdgeColor = 'none';
 xlabel("\theta_0");

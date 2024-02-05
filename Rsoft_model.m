@@ -189,33 +189,37 @@ potential = simplify(G + K*theta);
 % save("equilibria_tau.mat", "equilibria");
 
 %% Equilibria: Zero Dynamics
-% % Zero Dynamics (phi)
-% % To compute equilibria with numerical solutions
-% step_phi = pi/100;
-% 
-% phi = -pi:step_phi:pi;
-% 
-% n_try = 10;
-% for i = 1:length(phi)
-%     equilibria_equation = eval(simplify(subs(potential(2:3), [m; g; k; L; D; theta_r], [1; 9.81; 1; 1; 0.1; phi(i)])) == [0; 0]*0);
-% 
-% 
-% 
-%     for j = 1:n_try
-%         solutions = vpasolve(equilibria_equation, theta, 'Random', true);
-%         disp("Equilibrium for phi =" + num2str(phi(i)) + " | Tentative: " + num2str(j));
-% 
-%         if(isempty(solutions.theta0))
-%             equilibria{i}(j, 1) = nan;
-%             equilibria{i}(j, 2) = nan;
-%         else
-%             equilibria{i}(j, 1) = double(solutions.theta0);
-%             equilibria{i}(j, 2) = double(solutions.theta1);
-%         end
-%     end
-% end
-% 
-% % save("equilibria_phi.mat", "equilibria");
+% Zero Dynamics (phi)
+% To compute equilibria with numerical solutions
+step_phi = pi/100;
+
+phi = -pi:step_phi:pi;
+
+% with object
+m_obj = 0.1;
+
+n_try = 100;
+for i = 1:length(phi)
+    equilibria_equation = eval(simplify(subs(potential(2:3), [m; g; k; L; D; theta_r], [1 + m_obj; 9.81; 1; 1; 0.1; phi(i)])) == [0; 0]*0);
+
+
+
+    for j = 1:n_try
+        solutions = vpasolve(equilibria_equation, theta, 'Random', true);
+        disp("Equilibrium for phi =" + num2str(phi(i)) + " | Tentative: " + num2str(j));
+
+        if(isempty(solutions.theta0))
+            equilibria{i}(j, 1) = nan;
+            equilibria{i}(j, 2) = nan;
+        else
+            equilibria{i}(j, 1) = double(solutions.theta0);
+            equilibria{i}(j, 2) = double(solutions.theta1);
+        end
+    end
+end
+
+% save("equilibria_phi.mat", "equilibria");
+save("equilibria_phi_with_obj.mat", "equilibria");
 
 %% Computing Stiffness Matrix to Stability Analysis
 for i = 1:length(potential)

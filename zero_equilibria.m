@@ -8,9 +8,14 @@ addpath("my_functions");
 
 %% Load Equilibria
 k = 1;
+m_obj = 0.1;
 
 if k == 1
-    load("equilibria_phi1.mat");    
+    if m_obj ~= 0
+        load("equilibria_phi_with_obj.mat");
+    else
+        load("equilibria_phi1.mat");
+    end
 elseif k == 4
     load("equilibria_phi4.mat");
 end
@@ -23,7 +28,7 @@ phi = 0:0.1:2*pi;
 %% Stability
 for i = 1:length(phi)
     for j = 1:size(filtered_equilibria{i}, 1)     
-        stability{i}(j) = isPositiveDef(originStiffMat(filtered_equilibria{i}(j, 1), filtered_equilibria{i}(j, 2), 1, 9.81, k, 1, 0.1, phi(i))); 
+        stability{i}(j) = isPositiveDef(originStiffMat(filtered_equilibria{i}(j, 1), filtered_equilibria{i}(j, 2), 1 + m_obj, 9.81, k, 1, 0.1, phi(i))); 
     end
 end
 
