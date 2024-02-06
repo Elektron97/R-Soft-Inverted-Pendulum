@@ -8,7 +8,7 @@ addpath("my_functions");
 
 %% Load Equilibria
 k = 1;
-m_obj = 0.1;
+m_obj = 0.0;
 
 if k == 1
     if m_obj ~= 0
@@ -141,6 +141,7 @@ xlabel("\theta_{r, d} [rad]")
 ylabel("\theta_0 [rad]")
 % legend("Unstable", "Stable")
 xlim([-pi, pi])
+ylim([-8 8])
 % title("Equilibria of Zero Dynamics: \theta_0")
 hold on
 xl1 = xline(-pi/2,'--',{'Blue-Sky', 'Catastrophe'}, 'Color', [0.4660 0.6740 0.1880]);
@@ -160,6 +161,7 @@ xlabel("\theta_{r, d} [rad]")
 ylabel("\theta_1 [rad]")
 % legend("Unstable", "Stable")
 xlim([-pi, pi])
+ylim([-8 8])
 % title("Equilibria of Zero Dynamics: \theta_1")
 hold on
 xl1 = xline(-pi/2,'--',{'Blue-Sky', 'Catastrophe'}, 'Color', [0.4660 0.6740 0.1880]);
@@ -247,6 +249,7 @@ zlabel("\theta_{rd} [rad]")
 
 % title("Phase Space with Equilibria: PP planner")
 view(109, 15)
+zlim([-pi pi])
 
 %% Function
 function equil = filterEquilibria(equilibria)
