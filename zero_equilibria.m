@@ -8,7 +8,7 @@ addpath("my_functions");
 
 %% Load Equilibria
 k = 1;
-m_obj = 0.0;
+m_obj = 0.05;
 
 if k == 1
     if m_obj ~= 0

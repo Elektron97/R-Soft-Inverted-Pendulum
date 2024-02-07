@@ -196,9 +196,9 @@ step_phi = pi/100;
 phi = -pi:step_phi:pi;
 
 % with object
-m_obj = 0.1;
+m_obj = 0.0;
 
-n_try = 20;
+n_try = 10;
 for i = 1:length(phi)
     equilibria_equation = eval(simplify(subs(potential(2:3), [m; g; k; L; D; theta_r], [1 + m_obj; 9.81; 1; 1; 0.1; phi(i)])) == [0; 0]*0);
 
