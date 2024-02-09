@@ -191,12 +191,10 @@ potential = simplify(G + K*theta);
 %% Equilibria: Zero Dynamics
 % Zero Dynamics (phi)
 % To compute equilibria with numerical solutions
-step_phi = pi/100;
-
-phi = -pi:step_phi:pi;
+phi = 0:0.1:2*pi;  
 
 % with object
-m_obj = 0.0;
+m_obj = 0.5;
 
 n_try = 10;
 for i = 1:length(phi)
@@ -205,12 +203,14 @@ for i = 1:length(phi)
 
 
     for j = 1:n_try
-        solutions = vpasolve(equilibria_equation, theta, 'Random', true);
+        % solutions = vpasolve(equilibria_equation, theta, 'Random', true);
+        solutions = vpasolve(equilibria_equation, theta(2:3), 'Random', true);
         disp("Equilibrium for phi =" + num2str(phi(i)) + " | Tentative: " + num2str(j));
 
         if(isempty(solutions.theta0))
             equilibria{i}(j, 1) = nan;
             equilibria{i}(j, 2) = nan;
+            disp("[WARN] Not Found a Solution.");
         else
             equilibria{i}(j, 1) = double(solutions.theta0);
             equilibria{i}(j, 2) = double(solutions.theta1);
@@ -219,7 +219,7 @@ for i = 1:length(phi)
 end
 
 % save("equilibria_phi.mat", "equilibria");
-save("equilibria_phi_with_obj.mat", "equilibria");
+save("equilibria_phi_with_obj_5.mat", "equilibria");
 
 %% Computing Stiffness Matrix to Stability Analysis
 for i = 1:length(potential)

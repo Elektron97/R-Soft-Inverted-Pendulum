@@ -12,7 +12,7 @@ L = 1;
 D = 0.1;
 
 m = 1;
-m_obj = 0.0;
+m_obj = 0.3;
 g = 9.81;
 beta_r = 0.5;
 beta = 0.1;
@@ -43,10 +43,15 @@ Kp = -K(1);
 Kd = -K(2);
 
 %% Simulation
-is_pp = false;
+is_pp = true;
 if is_pp
-    load_system('pick_place.slx');
-    result=sim('pick_place.slx', 'ReturnWorkspaceOutputs','on'); %simulate and extract results
+    if m_obj == 0.0
+        load_system('pick_place.slx');
+        result=sim('pick_place.slx', 'ReturnWorkspaceOutputs','on'); %simulate and extract results
+    else
+        load_system('pick_place_obj.slx');
+        result=sim('pick_place_obj.slx', 'ReturnWorkspaceOutputs','on'); %simulate and extract results        
+    end
 else
     load_system('master_thesis.slx');
     result=sim('master_thesis.slx', 'ReturnWorkspaceOutputs','on'); %simulate and extract results
@@ -102,96 +107,96 @@ axis equal
 % title("Actuation");
 
 %% Multiple Frame Plot
-% close all
-% 
-% % Insert skip of robot frame configuration
-% skip_frame_robot = 5;
-% % skip_frame_quiver = 7;
-% 
-% if is_pp
-%     phase_time = [1, 739, 928, length(result.simout.time)];
-%     phase_color = {green_col, orange_col, cool_yellow, celeste_figo};
-% 
-%     %%%%% Cicle on Phases
-%     for phase=1:3
-% 
-%         figure
-%         hold on
-%         % Initial Position
-%         plot_Rsoft(result.simout.data(phase_time(phase), :), L, D, plot_frame=false, plot_thick=false, color=phase_color{phase})
-%         % Final Position
-%         plot_Rsoft(result.simout.data(phase_time(phase+1), :), L, D, plot_frame=false, plot_thick=false, color=phase_color{phase+1})
-%         for i = phase_time(phase):phase_time(phase+1)
-%             % skip_frame
-%             % rewrite (i % skip_frame_robot == 0) in matlab
-%             if(mod(i, skip_frame_robot) == 0)
-%                 plot_Rsoft(result.simout.data(i, :), L, D, plot_frame=false, plot_thick=false, color=gray_col, backbone_thick=1)
-%             end
-%             % Trajectory always continous
-%             tip_traj(:, i) = fwdKinRSIP(result.simout.data(i, :), 1, 0, L, D);
-%             % tip_vel(:, i) = jacobianSoft(result.simout.data(i, 1), ...
-%             %                                 result.simout.data(i, 2), ...
-%             %                                 result.simout.data(i, 3), ...
-%             %                                 1, 0, L, D)*result.simout3.data(i, :)';
-%         end
-%         % Initial Position
-%         plot_Rsoft(result.simout.data(phase_time(phase), :), L, D, plot_frame=false, plot_thick=false, color=phase_color{phase})
-%         % Final Position
-%         plot_Rsoft(result.simout.data(phase_time(phase+1), :), L, D, plot_frame=false, plot_thick=false, color=phase_color{phase+1})
-%         hold on
-%         % Tip Trajectory
-%         plot3(tip_traj(1, phase_time(phase):phase_time(phase+1)), ...
-%             tip_traj(2, phase_time(phase):phase_time(phase+1)), ...
-%             zeros(1, length(phase_time(phase):phase_time(phase+1))), ...
-%             'LineWidth', 2, 'Color', htmlGray)
-%         %Tip Velocity: all points
-%         % quiver3(tip_traj(1, phase_time(phase):skip_frame_quiver:phase_time(phase+1)), ...
-%         %         tip_traj(2, phase_time(phase):skip_frame_quiver:phase_time(phase+1)), ...
-%         %         zeros(1, length(phase_time(phase):skip_frame_quiver:phase_time(phase+1))), ...
-%         %         tip_vel(1, phase_time(phase):skip_frame_quiver:phase_time(phase+1)), ...
-%         %         tip_vel(2, phase_time(phase):skip_frame_quiver:phase_time(phase+1)), ...
-%         %         zeros(1, length(phase_time(phase):skip_frame_quiver:phase_time(phase+1))), ...
-%         %         'Color', '#25283D', 'LineWidth', 1.0)
-%         hold off
-%         xlabel("x [m]")
-%         ylabel("y [m]")
-%         % title("Pick and Place: Phase " + num2str(phase))
-%         legend("Initial Config. of Phase " + num2str(phase), "Final Config. of Phase " + num2str(phase))
-% 
-%         clear tip_traj
-%         clear tip_vel
-%     end
-% else
-%     figure
-%     hold on
-%     for i =1:length(result.simout.time)
-%         plot_Rsoft(result.simout.data(i, :), L, D, plot_frame=false, plot_thick=false, color=gray_col, backbone_thick=1)
-%         tip_traj(:, i) = fwdKinRSIP(result.simout.data(i, :), 1, 0, L, D);
-%     end
-%     % Initial Position
-%     plot_Rsoft(result.simout.data(1, :), L, D, plot_frame=false, plot_thick=false, color=green_col)
-%     % Final Position
-%     plot_Rsoft(result.simout.data(end, :), L, D, plot_frame=false, plot_thick=false, color=orange_col)
-%     hold on
-%     % Tip Trajectory
-%     plot3(tip_traj(1, :), tip_traj(2, :), zeros(1, length(result.simout.time)), ...
-%         'LineWidth', 2, 'Color', htmlGray)
-%     hold off
-%     xlabel("x [m]")
-%     ylabel("y [m]")
-% end
+close all
+
+% Insert skip of robot frame configuration
+skip_frame_robot = 5;
+% skip_frame_quiver = 7;
+
+if is_pp
+    phase_time = [1, 739, 928, length(result.simout.time)];
+    phase_color = {green_col, orange_col, cool_yellow, celeste_figo};
+
+    %%%%% Cicle on Phases
+    for phase=1:3
+
+        figure
+        hold on
+        % Initial Position
+        plot_Rsoft(result.simout.data(phase_time(phase), :), L, D, plot_frame=false, plot_thick=false, color=phase_color{phase})
+        % Final Position
+        plot_Rsoft(result.simout.data(phase_time(phase+1), :), L, D, plot_frame=false, plot_thick=false, color=phase_color{phase+1})
+        for i = phase_time(phase):phase_time(phase+1)
+            % skip_frame
+            % rewrite (i % skip_frame_robot == 0) in matlab
+            if(mod(i, skip_frame_robot) == 0)
+                plot_Rsoft(result.simout.data(i, :), L, D, plot_frame=false, plot_thick=false, color=gray_col, backbone_thick=1)
+            end
+            % Trajectory always continous
+            tip_traj(:, i) = fwdKinRSIP(result.simout.data(i, :), 1, 0, L, D);
+            % tip_vel(:, i) = jacobianSoft(result.simout.data(i, 1), ...
+            %                                 result.simout.data(i, 2), ...
+            %                                 result.simout.data(i, 3), ...
+            %                                 1, 0, L, D)*result.simout3.data(i, :)';
+        end
+        % Initial Position
+        plot_Rsoft(result.simout.data(phase_time(phase), :), L, D, plot_frame=false, plot_thick=false, color=phase_color{phase})
+        % Final Position
+        plot_Rsoft(result.simout.data(phase_time(phase+1), :), L, D, plot_frame=false, plot_thick=false, color=phase_color{phase+1})
+        hold on
+        % Tip Trajectory
+        plot3(tip_traj(1, phase_time(phase):phase_time(phase+1)), ...
+            tip_traj(2, phase_time(phase):phase_time(phase+1)), ...
+            zeros(1, length(phase_time(phase):phase_time(phase+1))), ...
+            'LineWidth', 2, 'Color', htmlGray)
+        %Tip Velocity: all points
+        % quiver3(tip_traj(1, phase_time(phase):skip_frame_quiver:phase_time(phase+1)), ...
+        %         tip_traj(2, phase_time(phase):skip_frame_quiver:phase_time(phase+1)), ...
+        %         zeros(1, length(phase_time(phase):skip_frame_quiver:phase_time(phase+1))), ...
+        %         tip_vel(1, phase_time(phase):skip_frame_quiver:phase_time(phase+1)), ...
+        %         tip_vel(2, phase_time(phase):skip_frame_quiver:phase_time(phase+1)), ...
+        %         zeros(1, length(phase_time(phase):skip_frame_quiver:phase_time(phase+1))), ...
+        %         'Color', '#25283D', 'LineWidth', 1.0)
+        hold off
+        xlabel("x [m]")
+        ylabel("y [m]")
+        % title("Pick and Place: Phase " + num2str(phase))
+        legend("Initial Config. of Phase " + num2str(phase), "Final Config. of Phase " + num2str(phase))
+
+        clear tip_traj
+        clear tip_vel
+    end
+else
+    figure
+    hold on
+    for i =1:length(result.simout.time)
+        plot_Rsoft(result.simout.data(i, :), L, D, plot_frame=false, plot_thick=false, color=gray_col, backbone_thick=1)
+        tip_traj(:, i) = fwdKinRSIP(result.simout.data(i, :), 1, 0, L, D);
+    end
+    % Initial Position
+    plot_Rsoft(result.simout.data(1, :), L, D, plot_frame=false, plot_thick=false, color=green_col)
+    % Final Position
+    plot_Rsoft(result.simout.data(end, :), L, D, plot_frame=false, plot_thick=false, color=orange_col)
+    hold on
+    % Tip Trajectory
+    plot3(tip_traj(1, :), tip_traj(2, :), zeros(1, length(result.simout.time)), ...
+        'LineWidth', 2, 'Color', htmlGray)
+    hold off
+    xlabel("x [m]")
+    ylabel("y [m]")
+end
 %% Rec Video
 % Tip 
 rec = false;
 close all
 
 if rec
-    v = VideoWriter("RSoft_Pendulum_PP.avi");
+    v = VideoWriter("RSoft_Pendulum_atan.avi");
     open(v);
 end
 
 fig = figure;
-% fig.WindowState = 'fullscreen';
+fig.WindowState = 'fullscreen';
 for i = 1:length(result.simout.time)
     subplot(2, 2, [1 3])
         cla reset % avoid multiple frame

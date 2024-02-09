@@ -8,11 +8,13 @@ addpath("my_functions");
 
 %% Load Equilibria
 k = 1;
-m_obj = 0.05;
+m_obj = 0.1;
+% m_obj = 0.0;
 
 if k == 1
     if m_obj ~= 0
         load("equilibria_phi_with_obj.mat");
+        % load("equilibria_phi_with_obj_2.mat");
     else
         load("equilibria_phi1.mat");
     end
@@ -24,6 +26,8 @@ for i = 1:length(equilibria)
    filtered_equilibria{i} = filterEquilibria(equilibria{i});
 end
 
+% step_phi = pi/100;
+% phi = -pi:step_phi:pi;
 phi = 0:0.1:2*pi;
 %% Stability
 for i = 1:length(phi)
