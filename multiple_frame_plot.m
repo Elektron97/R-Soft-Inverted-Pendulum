@@ -3,6 +3,11 @@ clear all
 close all
 clc
 
+%% Add Functions
+addpath("my_functions");
+addpath("Della Santina");
+addpath("origin_soft_pendulum");
+
 %% Load Result
 load("result_PP_with_obj.mat")
 
@@ -21,10 +26,12 @@ celeste_figo = [0 0.4470 0.7410];
 cool_yellow = [0.9290 0.6940 0.1250];
 cool_red = [0.6350 0.0780 0.1840];
 black = [0 0 0];
+red_equilibria = "#E3170A";
 
 %% Plot
 % Insert skip of robot frame configuration
 skip_frame_robot = 5;
+skip_object = 15;
 % skip_frame_quiver = 7;
 
 % Unique equilibrium
@@ -77,22 +84,46 @@ if is_pp
             tip_traj(2, phase_time(phase):phase_time(phase+1)), ...
             zeros(1, length(phase_time(phase):phase_time(phase+1))), ...
             'LineWidth', 2, 'Color', htmlGray)
-        %Tip Velocity: all points
-        % quiver3(tip_traj(1, phase_time(phase):skip_frame_quiver:phase_time(phase+1)), ...
-        %         tip_traj(2, phase_time(phase):skip_frame_quiver:phase_time(phase+1)), ...
-        %         zeros(1, length(phase_time(phase):skip_frame_quiver:phase_time(phase+1))), ...
-        %         tip_vel(1, phase_time(phase):skip_frame_quiver:phase_time(phase+1)), ...
-        %         tip_vel(2, phase_time(phase):skip_frame_quiver:phase_time(phase+1)), ...
-        %         zeros(1, length(phase_time(phase):skip_frame_quiver:phase_time(phase+1))), ...
-        %         'Color', '#25283D', 'LineWidth', 1.0)
 
+
+        object_size = 3.5;
         % Add Object
-        % TO DO
+        if phase == 1
+            plot3(tip_traj(1, phase_time(phase+1)), ...
+            tip_traj(2, phase_time(phase+1)), ...
+            0.0, ...
+            'o', 'LineWidth', object_size, 'MarkerFaceColor', red_equilibria, 'Color', red_equilibria)
+        else
+            % % Add for each shadow backbone
+            % for i = phase_time(phase):phase_time(phase+1)
+            %     % skip_frame
+            %     % rewrite (i % skip_frame_robot == 0) in matlab
+            %     if(mod(i, skip_object) == 0)
+            %         plot3(tip_traj(1, i), ...
+            %                 tip_traj(2, i), ...
+            %                 0.0, ...
+            %                 'o', 'LineWidth', 3.5, 'MarkerFaceColor', red_equilibria, ...
+            %                 'Color', red_equilibria)
+            %     end
+            % end
+
+            % Add to the initial and final position
+            % Init
+            plot3(tip_traj(1, phase_time(phase)), ...
+            tip_traj(2, phase_time(phase)), ...
+            0.0, ...
+            'o', 'LineWidth', object_size, 'MarkerFaceColor', red_equilibria, 'Color', red_equilibria)
+            
+            % Final
+            plot3(tip_traj(1, phase_time(phase+1)), ...
+            tip_traj(2, phase_time(phase+1)), ...
+            0.0, ...
+            'o', 'LineWidth', object_size, 'MarkerFaceColor', red_equilibria, 'Color', red_equilibria)
+        end
         
         hold off
         xlabel("x [m]")
         ylabel("y [m]")
-        % title("Pick and Place: Phase " + num2str(phase))
         legend("Initial Config. of Phase " + num2str(phase), "Final Config. of Phase " + num2str(phase))
 
         clear tip_traj

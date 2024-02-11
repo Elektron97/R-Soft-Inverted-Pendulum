@@ -41,7 +41,7 @@ for k = 1:length(equilibria_obj)
 %% Stability
     for i = 1:length(phi)
         for j = 1:size(filtered_equilibria{k}{i}, 1)     
-            stability{k}{i}(j) = isPositiveDef(originStiffMat(filtered_equilibria{k}{i}(j, 1), filtered_equilibria{k}{i}(j, 2), 1 + m_objs(k), 9.81, k, 1, 0.1, phi(i))); 
+            stability{k}{i}(j) = isPositiveDef(originStiffMat(filtered_equilibria{k}{i}(j, 1), filtered_equilibria{k}{i}(j, 2), 1 + m_objs(k), 9.81, 1, 1, 0.1, phi(i))); 
         end
     end
 end
