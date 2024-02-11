@@ -123,13 +123,12 @@ end
 
 figure(f3)
 grid on
-legend([plt_stable0{:}, plt_unstable0{:}], ...
+legend_theta0 = legend([plt_stable0{:}, plt_unstable0{:}], ...
         {'Stable 0.0 [Kg]', 'Stable 0.1 [Kg]', 'Stable 0.3 [Kg]', ...
          'Unstable 0.0 [Kg]', 'Unstable 0.1 [Kg]', 'Unstable 0.3 [Kg]'}, 'NumColumns', 2);
 xlabel("\theta_{r, d} [rad]")
 ylabel("\theta_0 [rad]")
 xlim([-pi, pi])
-
 
 figure(f4)
 grid on

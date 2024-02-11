@@ -43,7 +43,7 @@ Kp = -K(1);
 Kd = -K(2);
 
 %% Simulation
-is_pp = true;
+is_pp = false;
 if is_pp
     if m_obj == 0.0
         load_system('pick_place.slx');
